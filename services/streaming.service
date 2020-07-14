@@ -1,0 +1,26 @@
+[Unit]
+Description=Radioglobe Streaming Test Service
+
+# Only start if system is configured
+ConditionPathExists=/home/pi/work/radioglobe/stations.json
+
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+
+User=pi
+Group=pi
+
+# Start python script in unbuffered mode ( output to logs )
+WorkingDirectory=/home/pi/work/radioglobe
+ExecStart=/usr/bin/python3 -u streaming.py
+
+# Can be enabled if app crashes
+#Restart=always
+#RestartSec=3
+
+[Install]
+# Start unit when the system is starting
+WantedBy=multi-user.target
