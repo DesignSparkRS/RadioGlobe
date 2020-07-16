@@ -2,7 +2,7 @@
 Description=Radioglobe Radio Service
 
 # Only start if system is configured
-ConditionPathExists=/home/pi/work/radioglobe/stations.json
+ConditionPathExists=/home/pi/work/RadioGlobe/stations.json
 
 After=network.target
 Wants=network.target
@@ -14,7 +14,7 @@ User=pi
 Group=pi
 
 # Start python script in unbuffered mode ( output to logs )
-WorkingDirectory=/home/pi/work/radioglobe
+WorkingDirectory=/home/pi/work/RadioGlobe
 ExecStart=/usr/bin/python3 -u main.py
 
 # Can be enabled if app crashes

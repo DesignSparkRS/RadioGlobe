@@ -21,7 +21,7 @@ From an SSH terminal:
 4. Run ```mkdir ~/work && cd ~/work```  (You can actually put it in a different folder, but you'll need to perform an
    additional step if you do).
 5. Download this software by running ```git clone https://github.com/DesignSparkrs/RadioGlobe.git```
-6. Run ```cd radioglobe```
+6. Run ```cd RadioGlobe```
 7. (If you cloned to a folder other than ~/work, then run ```nano services/radioglobe.service``` and change the paths on
    lines 5 and 17 accordingly.  Repeat this in ```nano services/streaming.service```)
 5. Run ```sudo ./install.sh```  This will install all dependencies and install the service so that the radio automatically
