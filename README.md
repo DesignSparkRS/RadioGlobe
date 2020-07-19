@@ -16,7 +16,9 @@ enable it in the settings menu, just place an empty file named 'ssh' in the 'BOO
 ## Installation
 From an SSH terminal:
 1. Run ```sudo raspi-config```
-2. In 'Network Options', enter the details (SSID and password) for your wi-fi network if you want to.
+2. If you want to use Wi-Fi, go to 'Localisation Options', then 'Enter WLAN Country' where you can select your country.
+   HINT: United Kingdom is GB!  Press Esc to return to the main menu then go to 'Network Options' > 'Wireless LAN' and
+   enter your SSID (network name) and password.
 3. In 'Interfacing Options' enable SPI and I2C.
 4. Run ```mkdir ~/work && cd ~/work```  (You can actually put it in a different folder, but you'll need to perform an
    additional step if you do).
@@ -24,5 +26,5 @@ From an SSH terminal:
 6. Run ```cd RadioGlobe```
 7. (If you cloned to a folder other than ~/work, then run ```nano services/radioglobe.service``` and change the paths on
    lines 5 and 17 accordingly.  Repeat this in ```nano services/streaming.service```)
-5. Run ```sudo ./install.sh```  This will install all dependencies and install the service so that the radio automatically
-   starts when the Raspberry Pi is powered on in the future.
+5. Run ```sudo ./install.sh```  This will install all dependencies and install the service so that the radio
+   automatically starts when the Raspberry Pi is powered on in the future.
