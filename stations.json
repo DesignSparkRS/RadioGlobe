@@ -4178,6 +4178,18 @@
     },
     "urls": [
       {
+        "name": "Japanimradio FM",
+        "url": "http://streamingv2.shoutcast.com/japanimradio-fm"
+      },
+      {
+        "name": "NHK World-Japan Radio",
+        "url": "http://nhkworld.webcdn.stream.ne.jp/www11/radiojapan/all/263943/live_s.m3u8"
+      },
+      {
+        "name": "Radio Eigekai Indies",
+        "url": "http://stream.radiojar.com/66zgtscuc1duv"
+      },
+      {
         "name": "JOZZ3AG",
         "url": "http://live.leanstream.co:80/JCB032-MP3.m3u"
       },
@@ -4218,11 +4230,7 @@
         "url": "https://nhkradioakfm-i.akamaihd.net/hls/live/512290/1-fm/1-fm-01.m3u8"
       },
       {
-        "name": "JOAK NHK\u00e3\u0083\u00a9\u00e3\u0082\u00b8\u00e3\u0082\u00aa\u00e7\u00ac\u00ac1 594kHz",
-        "url": "https://nhkradioakr1-i.akamaihd.net/hls/live/511633/1-r1/1-r1-01.m3u8"
-      },
-      {
-        "name": "JOAK NHK\u00e3\u0083\u00a9\u00e3\u0082\u00b8\u00e3\u0082\u00aa\u00e7\u00ac\u00ac1 594kHz",
+        "name": "JOAK NHK 594kHz",
         "url": "https://nhkradioakr1-i.akamaihd.net/hls/live/511633/1-r1/1-r1-01.m3u8"
       }
     ]
@@ -4234,7 +4242,11 @@
     },
     "urls": [
       {
-        "name": "JOZZ4AA FM\u00e3\u0081\u00ab\u00e3\u0081\u0084\u00e3\u0081\u00a4 76.1MHz",
+        "name": "FM-J",
+        "url": "https://musicbird-hls.leanstream.co/musicbird/JCB095.stream"
+      },
+      {
+        "name": "JOZZ4AA FM 76.1MHz",
         "url": "http://live.leanstream.co:80/JCB107-MP3.m3u"
       },
       {
@@ -4250,7 +4262,7 @@
         "url": "https://nhkradioakfm-i.akamaihd.net/hls/live/512290/1-fm/1-fm-01.m3u8"
       },
       {
-        "name": "JOAK NHK\u00e3\u0083\u00a9\u00e3\u0082\u00b8\u00e3\u0082\u00aa\u00e7\u00ac\u00ac1 594kHz",
+        "name": "JOAK NHK 594kHz",
         "url": "https://nhkradioakr1-i.akamaihd.net/hls/live/511633/1-r1/1-r1-01.m3u8"
       }
     ]
@@ -4275,12 +4287,28 @@
       }
     ]
   },
+  "Kumamoto,JP": {
+    "coords": {
+      "n": 32.8,
+      "e": 130.71
+    },
+    "urls": [
+      {
+        "name": "FM845",
+        "url": "https://musicbird-hls.leanstream.co/musicbird/JCB104.stream"
+      }
+    ]
+  },
   "Kyoto,JP": {
     "coords": {
       "n": 35.01,
       "e": 135.76
     },
     "urls": [
+      {
+        "name": "FM845",
+        "url": "https://musicbird-hls.leanstream.co/musicbird/JCB104.stream"
+      },
       {
         "name": "JOZZ7AY",
         "url": "http://live.vanvan.net/live.mp3"
@@ -4314,7 +4342,7 @@
         "url": "http://live.leanstream.co:80/JCB068-MP3.m3u"
       },
       {
-        "name": "JOZZ7AP FM\u00e3\u0081\u00a1\u00e3\u0082\u0083\u00e3\u0081\u008a 79.2MHz",
+        "name": "JOZZ7AP FM 79.2MHz",
         "url": "http://live.leanstream.co:80/JCB067-MP3.m3u"
       },
       {
@@ -4338,7 +4366,7 @@
     },
     "urls": [
       {
-        "name": "JOZZ8AG FM\u00e3\u0081\u00a1\u00e3\u0082",
+        "name": "JOZZ8AG FM",
         "url": "http://live.leanstream.co:80/JCB082-MP3.m3u"
       },
       {
