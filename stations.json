@@ -2795,6 +2795,18 @@
       }
     ]
   },
+  "Castres,FR": {
+    "coords": {
+      "n": 43.60,
+      "e": 2.24
+    },
+    "urls": [
+      {
+        "name": "RADIOM",
+        "url": "https://live.radiom.fr/live320.mp3"
+      }
+    ]
+  },
   "Bayonne,FR": {
     "coords": {
       "n": 43.49,
