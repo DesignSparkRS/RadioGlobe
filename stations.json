@@ -8946,24 +8946,24 @@
     },
     "urls": [
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 1",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 2",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_two.m3u8"
       },
       {
-        "name": "Westside Radio",
-        "url": "http://radio.canstream.co.uk:8002/live.mp3.m3u"
+        "name": "BBC Radio 3",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_three.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio3_mf_p.m3u"
+        "name": "BBC Radio 4",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_fourfm.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio3_mf_p.m3u"
+        "name": "Heart London",
+        "url": "https://media-ssl.musicradio.com/HeartLondon"
       }
     ]
   },
@@ -8974,20 +8974,20 @@
     },
     "urls": [
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 1",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8"
       },
       {
-        "name": "Big City Radio",
-        "url": "http://198.27.66.225:8282/listen.pls"
+        "name": "BBC Radio 2",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_two.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 3",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_three.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio3_mf_p.m3u"
+        "name": "BBC Radio 4",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_fourfm.m3u8"
       },
       {
         "name": "Raaj FM",
@@ -9002,24 +9002,20 @@
     },
     "urls": [
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 1",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 2",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_two.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 3",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_three.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
-      },
-      {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio3_mf_p.m3u"
+        "name": "BBC Radio 4",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_fourfm.m3u8"
       }
     ]
   },
@@ -9030,24 +9026,20 @@
     },
     "urls": [
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 1",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 2",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_two.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio3_mf_p.m3u"
+        "name": "BBC Radio 3",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_three.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio3_mf_p.m3u"
-      },
-      {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio4fm_mf_p.m3u"
+        "name": "BBC Radio 4",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_fourfm.m3u8"
       }
     ]
   },
@@ -9058,24 +9050,20 @@
     },
     "urls": [
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 1",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 2",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_two.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 3",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_three.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
-      },
-      {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio3_mf_p.m3u"
+        "name": "BBC Radio 4",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_fourfm.m3u8"
       }
     ]
   },
@@ -9086,24 +9074,20 @@
     },
     "urls": [
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 1",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 2",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_two.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 3",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_three.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio3_mf_p.m3u"
-      },
-      {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio3_mf_p.m3u"
+        "name": "BBC Radio 4",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_fourfm.m3u8"
       }
     ]
   },
@@ -9118,20 +9102,20 @@
         "url": "http://ice-the.musicradio.com:80/HeartNorthWalesMP3.m3u"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 1",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 2",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_two.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 3",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_three.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 4",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_fourfm.m3u8"
       }
     ]
   },
@@ -9142,24 +9126,20 @@
     },
     "urls": [
       {
-        "name": "Gaydio",
-        "url": "http://stream.gaydio.co.uk/gaydiouk.mp3.m3u"
+        "name": "BBC Radio 1",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 2",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_two.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 3",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_three.m3u8"
       },
       {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
-      },
-      {
-        "name": "BBC Radio",
-        "url": "http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p.m3u"
+        "name": "BBC Radio 4",
+        "url": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_fourfm.m3u8"
       }
     ]
   },
