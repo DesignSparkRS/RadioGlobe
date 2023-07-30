@@ -1,8 +1,9 @@
 [Unit]
 Description=Radioglobe Streaming Test Service
+#Note replace USER with username - the install script will do this for you
 
 # Only start if system is configured
-ConditionPathExists=/home/pi/work/RadioGlobe/stations.json
+ConditionPathExists=/home/USER/RadioGlobe/stations.json
 
 After=network.target
 Wants=network.target
@@ -10,11 +11,11 @@ Wants=network.target
 [Service]
 Type=simple
 
-User=pi
-Group=pi
+User=USER
+Group=USER
 
 # Start python script in unbuffered mode ( output to logs )
-WorkingDirectory=/home/pi/work/RadioGlobe
+WorkingDirectory=/home/USER/RadioGlobe
 ExecStart=/usr/bin/python3 -u streaming.py
 
 # Can be enabled if app crashes
