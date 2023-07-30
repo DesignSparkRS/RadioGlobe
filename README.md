@@ -6,7 +6,7 @@ If using Raspberry Pi Imager use the configure cog to set SSH ON and set your de
 If flashing the OS manually, you will need to add a couple of configuration files to setup SSH and configure the username / password:
 1. Insert the microSD card containing the Raspberry Pi OS installation into a Mac or PC.
 2. Open the 'BOOT' volume in My Computer (Windows), Files (Ubuntu) or Finder (macOS).
-3. Create a new text file and name it 'ssh'.  On Windows, don't forget to remove the file extension (.txt).
+3. Create a new text file and name it "ssh".  On Windows, don't forget to remove the file extension (.txt).
 4. Alternatively in Linux or macOS cd to the 'BOOT' volume and run ```touch ssh```
 5. Add a file named ```userconf.txt``` containing a single line with username:encrypted-password - for more details see ```https://www.raspberrypi.com/documentation/computers/configuration.html#setting-up-a-headless-raspberry-pi```
 6. Unmount the microSD card and insert it into the Raspberry Pi.
@@ -18,6 +18,7 @@ Once you are in the SSH session update the system and perform a reboot before in
 1. Run ```sudo apt update```
 2. Run ```sudo apt upgrade```
 3. Run ```sudo reboot```
+
 Now SSH in again.
 
 ## Installation
@@ -29,7 +30,7 @@ From an SSH terminal:
 1. Run ```sudo raspi-config```
 2. In 'Interfacing Options' enable SPI and I2C.
 3. Install git: ```sudo apt install git```
-4. Make sure you are in your home home directory: ```cd ~``
+4. Make sure you are in your home home directory: ```cd ~```
 5. Clone the software by running ```git clone https://github.com/DesignSparkrs/RadioGlobe.git```
 6. Change into the RadioGlobe dir ```cd RadioGlobe```
 7. Run the install script to install dependencies and setup the services ```./install.sh```
