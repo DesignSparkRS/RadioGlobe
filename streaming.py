@@ -10,10 +10,13 @@ import re
 import requests
 from requests.exceptions import Timeout
 import concurrent.futures
+import logging
 
 mixer_name = None
 
-def set_volume(percent:int) -> int:
+
+def set_volume(percent: int) -> int:
+    logging.info("Setting volume: %u", percent)
     global mixer_name
 
     if not mixer_name:
@@ -31,6 +34,7 @@ def set_volume(percent:int) -> int:
     # Return the percent volume, so that the caller doesn't have to handle capping to 0-100
     return percent
 
+
 def check_url(url) -> str:
     """Returns only good urls, or None"""
     try:
@@ -47,6 +51,7 @@ def check_url(url) -> str:
 
 def launch(audio, url) -> 'pid':
     """Play url returning the vlc pid"""
+    logging.info("Launching audio: %s, %s", audio, url)
     radio = subprocess.Popen(['cvlc', '--aout', audio, url])
     return radio.pid
 
@@ -55,6 +60,7 @@ class Streamer ():
     """A streaming audio player using vlc's command line"""
 
     def __init__(self, audio, url):
+        logging.info("Starting Streamer: %s, %s", audio, url)
         self.audio = audio
         self.url = url
         self.radio_pid = None
@@ -64,12 +70,13 @@ class Streamer ():
             try:
                 # Play streamer in a separate process
                 ex = executor.submit(launch, self.audio, self.url)
+                logging.info("Pool Executor: %s, %s", self.audio, self.url)
             except Exception as e:
-                print('URL Error', e)
+                logging.info("Pool Executor error: %s", e)
             else:
                 # Get the vlc process pid so it can be stopped (killed!)
                 self.radio_pid = ex.result()
-                print(self.radio_pid)
+                logging.info("Pool Executor PID: %s", self.radio_pid)
 
     def stop(self):
         """Kill the vlc process. It's a bit brutal but it works
@@ -77,10 +84,9 @@ class Streamer ():
         which is probably a bug in vlc"""
         try:
             os.kill(self.radio_pid, signal.SIGKILL)
+            logging.info("Killing Streamer PID: %s", self.radio_pid)
         except Exception as e:
-            print('Error: ', e)
-        else:
-            print('Stopped: ', self.radio_pid)
+            logging.info("Kill Streamer error: %s", e)
 
 
 if __name__ == "__main__":

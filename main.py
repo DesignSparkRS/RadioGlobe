@@ -3,6 +3,7 @@ import re
 import time
 import threading
 import subprocess
+import logging
 
 from streaming import Streamer, set_volume
 import database
@@ -21,6 +22,9 @@ volume = 95
 jog = 0
 last_jog = 0
 state_entry = True
+
+logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
+
 ui_manager = UI_Manager()
 
 # This is used to increase the size of the area searched around the coords
