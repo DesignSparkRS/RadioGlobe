@@ -35,7 +35,7 @@ def set_volume(percent: int) -> int:
     return percent
 
 
-def check_url(url) -> str:
+def check_url(url: str) -> str | None:
     """Returns only good urls, or None"""
     try:
         response = requests.get(url, timeout=0.1)
@@ -49,7 +49,7 @@ def check_url(url) -> str:
     return None
 
 
-def launch(audio, url) -> 'pid':
+def launch(audio: str, url: str) -> int:
     """Play url returning the vlc pid"""
     logging.info("Launching audio: %s, %s", audio, url)
     radio = subprocess.Popen(['cvlc', '--aout', audio, url])
@@ -107,11 +107,11 @@ if __name__ == "__main__":
     while True:
         for url in urls:
             i = urls.index(url)
-            if not check_url(url):
-                print(f'Bad URL, {i}, {url}')
-            else:
+            if check_url(url) is not None:
                 print(f'Playing URL, {i}, {url}')
                 streamer = Streamer(audio, url)
                 streamer.play()
                 time.sleep(clip_duration)
                 streamer.stop()
+            else:
+                print(f'Bad URL, {i}, {url}')
