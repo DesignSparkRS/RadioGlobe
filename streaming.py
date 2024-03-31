@@ -41,9 +41,9 @@ def check_url(url: str) -> str | None:
     try:
         response = requests.get(url, timeout=0.1)
     except Timeout as e:
-        print(f'URL Timeout, {url}, {e}')
+        logging.debug("URL Timeout, %s, %s", url, e)
     except Exception as e:
-        print(f'URL error, {url}, {e}')
+        logging.debug("URL Error, %s, %s", url, e)
     else:
         if response.status_code == requests.codes.ok:
             return url
@@ -52,7 +52,7 @@ def check_url(url: str) -> str | None:
 
 def launch(audio: str, url: str) -> int:
     """Play url returning the vlc pid"""
-    logging.info("Launching audio: %s, %s", audio, url)
+    logging.debug("Launching audio: %s, %s", audio, url)
     radio = subprocess.Popen(['cvlc', '--aout', audio, url])
     return radio.pid
 
@@ -61,7 +61,7 @@ class Streamer ():
     """A streaming audio player using vlc's command line"""
 
     def __init__(self, audio, url):
-        logging.info("Starting Streamer: %s, %s", audio, url)
+        logging.debug("Starting Streamer: %s, %s", audio, url)
         self.audio = audio
         self.url = url
         self.radio_pid = None
@@ -71,13 +71,13 @@ class Streamer ():
             try:
                 # Play streamer in a separate process
                 ex = executor.submit(launch, self.audio, self.url)
-                logging.info("Pool Executor: %s, %s", self.audio, self.url)
+                logging.debug("Pool Executor: %s, %s", self.audio, self.url)
             except Exception as e:
-                logging.info("Pool Executor error: %s", e)
+                logging.debug("Pool Executor error: %s", e)
             else:
                 # Get the vlc process pid so it can be stopped (killed!)
                 self.radio_pid = ex.result()
-                logging.info("Pool Executor PID: %s", self.radio_pid)
+                logging.debug("Pool Executor PID: %s", self.radio_pid)
 
     def stop(self):
         """Kill the vlc process. It's a bit brutal but it works
@@ -85,12 +85,15 @@ class Streamer ():
         which is probably a bug in vlc"""
         try:
             os.kill(self.radio_pid, signal.SIGKILL)
-            logging.info("Killing Streamer PID: %s", self.radio_pid)
+            logging.debug("Killing Streamer PID: %s", self.radio_pid)
         except Exception as e:
-            logging.info("Kill Streamer error: %s", e)
+            logging.debug("Kill Streamer error: %s", e)
 
 
 if __name__ == "__main__":
+    format = "%(asctime)s: %(message)s"
+    logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
+    # logging.getLogger().setLevel(logging.DEBUG)
 
     stations_file = 'stations.json'
     audio = 'alsa'  # or pulse
@@ -103,20 +106,20 @@ if __name__ == "__main__":
 
     # Get list of urls
     url_list = [url['url'].strip() for k, v in stations.items() for url in v['urls']]
-    top5 = url_list[:5]
-    print(top5)
     urls = list(set(url_list))  # De-duped list
+    top5 = urls[:5]
+    logging.info("%s", top5)
 
-    print(f'{len(urls)} URLs')
+    logging.info("Station list length: %s, URLs", len(urls))
 
     while True:
         i = random.choice(range(len(urls)))
         url = urls[i]
         if check_url(url) is not None:
-            print(f'Playing URL, {i}, {url}')
+            logging.info("Playing URL, %s, %s", i, url)
             streamer = Streamer(audio, url)
             streamer.play()
             time.sleep(clip_duration)
             streamer.stop()
         else:
-            print(f'Bad URL, {i}, {url}')
+            logging.info("Bad URL, %s, %s", i, url)
