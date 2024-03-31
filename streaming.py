@@ -11,12 +11,13 @@ import requests
 from requests.exceptions import Timeout
 import concurrent.futures
 import logging
+import random
 
 mixer_name = None
 
 
-def set_volume(percent: int) -> int:
-    logging.info("Setting volume: %u", percent)
+def set_volume(volume: int) -> int:
+    logging.info("Setting volume: %u", volume)
     global mixer_name
 
     if not mixer_name:
@@ -24,15 +25,15 @@ def set_volume(percent: int) -> int:
         control_match = re.match(r"Simple mixer control \'(.*)\'", str(get_control.stdout, encoding="utf-8").rstrip())
         if control_match:
             mixer_name = control_match.group(1)
-
-    if percent > 100:
-        percent = 100
-    elif percent < 0:
-        percent = 0
-    subprocess.run(['amixer', 'set', mixer_name, ('{}%').format(percent)])
-
-    # Return the percent volume, so that the caller doesn't have to handle capping to 0-100
-    return percent
+    # a value between 0 and 100
+    if volume > 100:
+        volume = 100
+    elif volume < 0:
+        volume = 0
+    command = ["amixer", "sset", "Master", "{}%".format(volume)]
+    subprocess.Popen(command)
+    # Return the volume, so that the caller doesn't have to handle capping to 0-100
+    return volume
 
 
 def check_url(url: str) -> str | None:
@@ -98,20 +99,24 @@ if __name__ == "__main__":
     with Path(stations_file).open(mode='r') as f:
         stations = json.load(f)
 
+    set_volume(50)
+
     # Get list of urls
     url_list = [url['url'].strip() for k, v in stations.items() for url in v['urls']]
+    top5 = url_list[:5]
+    print(top5)
     urls = list(set(url_list))  # De-duped list
 
     print(f'{len(urls)} URLs')
 
     while True:
-        for url in urls:
-            i = urls.index(url)
-            if check_url(url) is not None:
-                print(f'Playing URL, {i}, {url}')
-                streamer = Streamer(audio, url)
-                streamer.play()
-                time.sleep(clip_duration)
-                streamer.stop()
-            else:
-                print(f'Bad URL, {i}, {url}')
+        i = random.choice(range(len(urls)))
+        url = urls[i]
+        if check_url(url) is not None:
+            print(f'Playing URL, {i}, {url}')
+            streamer = Streamer(audio, url)
+            streamer.play()
+            time.sleep(clip_duration)
+            streamer.stop()
+        else:
+            print(f'Bad URL, {i}, {url}')
