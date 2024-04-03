@@ -91,15 +91,20 @@ class Streamer ():
 
 
 if __name__ == "__main__":
+    """
+    python streaming.py 'london-stations.json'
+    """
+    import sys
+
     format = "%(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
     # logging.getLogger().setLevel(logging.DEBUG)
 
-    stations_file = 'stations.json'
+    stations_file = sys.argv[1]
     audio = 'alsa'  # or pulse
     clip_duration = 10
 
-    with Path(stations_file).open(mode='r') as f:
+    with Path(stations_file).open(mode='r', encoding='utf8') as f:
         stations = json.load(f)
 
     set_volume(50)
@@ -115,11 +120,8 @@ if __name__ == "__main__":
     while True:
         i = random.choice(range(len(urls)))
         url = urls[i]
-        if check_url(url) is not None:
-            logging.info("Playing URL, %s, %s", i, url)
-            streamer = Streamer(audio, url)
-            streamer.play()
-            time.sleep(clip_duration)
-            streamer.stop()
-        else:
-            logging.info("Bad URL, %s, %s", i, url)
+        logging.info("Playing URL, %s, %s", i, url)
+        streamer = Streamer(audio, url)
+        streamer.play()
+        time.sleep(clip_duration)
+        streamer.stop()
