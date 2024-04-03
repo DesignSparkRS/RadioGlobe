@@ -36,7 +36,7 @@ def set_volume(volume: int) -> int:
     return volume
 
 
-def check_url(url: str) -> str | None:
+def check_url(url: str) -> str:
     """Returns only good urls, or None"""
     try:
         response = requests.get(url, timeout=0.1)
@@ -47,7 +47,7 @@ def check_url(url: str) -> str | None:
     else:
         if response.status_code == requests.codes.ok:
             return url
-    return None
+    return ""
 
 
 def launch(audio: str, url: str) -> int:
