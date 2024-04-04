@@ -13,7 +13,12 @@ source ./venv/bin/activate
 # Install python dependencies
 pip install spidev
 pip install smbus
-pip install RPi.GPIO
+
+# Bullseye only
+#pip install RPi.GPIO
+# Bookworm compatibility with RPi.GPIO
+pip install lgpio
+pip install rpi-lgpio
 pip3 install https://github.com/pl31/python-liquidcrystal_i2c/archive/master.zip
 #pip3 install python-vlc
 
