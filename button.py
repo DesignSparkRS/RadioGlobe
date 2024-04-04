@@ -17,8 +17,8 @@ class Button (threading.Thread):
         GPIO.setup(self.pin, direction=GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(self.pin, GPIO.FALLING, callback=self.start_timer, bouncetime=150)
 
-    def __del__(self):
-        GPIO.cleanup()
+    # def __del__(self):
+        # GPIO.cleanup()
 
     def start_timer(self, arg):
         time.sleep(0.1)

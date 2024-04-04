@@ -14,8 +14,8 @@ class Dial (threading.Thread):
         GPIO.setup([17, 18], direction=GPIO.IN, pull_up_down=GPIO.PUD_UP)
         self.direction = 0
 
-    def __del__(self):
-        GPIO.cleanup()
+    # def __del__(self):
+        # GPIO.cleanup()
 
     def get_direction(self):
         # Pickup the direction and zero it, so we only get it once
