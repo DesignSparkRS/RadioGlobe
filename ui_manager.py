@@ -34,9 +34,9 @@ class UI_Manager:
         self.dial = Dial(10, "Jog")
         self.dial.start()
 
-    def __del__(self):
-        del(self.button_manager)
-        del(self.dial)
+    # def __del__(self):
+        # del(self.button_manager)
+        # del(self.dial)
 
     def update(self, receiving_queue: list):
         # Get control events
