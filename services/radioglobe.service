@@ -14,9 +14,9 @@ Type=simple
 User=USER
 Group=USER
 
-# Start python script in unbuffered mode ( output to logs )
+# Start python script with venv in unbuffered mode ( output to logs )
 WorkingDirectory=/home/USER/RadioGlobe
-ExecStart=/usr/bin/python3 -u main.py
+ExecStart=/home/USER/RadioGlobe/venv/bin/python -u main.py
 
 # Can be enabled if app crashes
 #Restart=always
