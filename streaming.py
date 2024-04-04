@@ -1,4 +1,3 @@
-#! /usr/bin/python3
 # Thanks to Peter Milne!
 import time
 import subprocess
@@ -7,8 +6,8 @@ import signal
 from pathlib import Path
 import json
 import re
-import requests
-from requests.exceptions import Timeout
+# import requests
+# from requests.exceptions import Timeout
 import concurrent.futures
 import logging
 import random
@@ -36,18 +35,21 @@ def set_volume(volume: int) -> int:
     return volume
 
 
-def check_url(url: str) -> str:
-    """Returns only good urls, or None"""
-    try:
-        response = requests.get(url, timeout=0.1)
-    except Timeout as e:
-        logging.debug("URL Timeout, %s, %s", url, e)
-    except Exception as e:
-        logging.debug("URL Error, %s, %s", url, e)
-    else:
-        if response.status_code == requests.codes.ok:
-            return url
-    return ""
+# def check_url(url: str) -> bool:
+    # """
+    # Returns True if URL is good else False
+    # Note: Needs further work - does't return for some urls
+    # """
+    # try:
+        # response = requests.get(url, timeout=0.1)
+    # except Timeout as e:
+        # logging.debug("URL Timeout, %s, %s", url, e)
+    # except Exception as e:
+        # logging.debug("URL Error, %s, %s", url, e)
+    # else:
+        # if response.status_code == requests.codes.ok:
+            # return True
+    # return False
 
 
 def launch(audio: str, url: str) -> int:
