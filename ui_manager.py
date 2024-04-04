@@ -1,4 +1,24 @@
-#! /usr/bin/python3
+"""
+Converts button and encoder actions into events
+
+Top button:
+    Hold to increase VOLUME
+    Press to confirm SHUTDOWN
+
+Low button:
+    Hold to decrease VOLUME
+    Press to cancel SHUTDOWN
+
+Mid button:
+    Set cross-hair to Lat / Long zero first
+    Hold for > 5 seconds to start CALIBRATION and until
+    LED flashes GREEN to indicate calibration has taken place
+
+Jog button:
+    Press to select RANDOM channel for city
+    Hold > 3 seconds to start SAFE SHUTDOWN
+"""
+
 import time
 from button import Button_Manager
 from dial import Dial
