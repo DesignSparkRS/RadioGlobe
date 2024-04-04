@@ -36,8 +36,8 @@ class RGB_LED (threading.Thread):
 
         self.timer = None
 
-    def __del__(self):
-        GPIO.cleanup()
+    # def __del__(self):
+        # GPIO.cleanup()
 
     def set_static(self, colour=None: str, timeout_sec=None: float, restore_previous_on_timeout=False: bool):
         if timeout_sec:
