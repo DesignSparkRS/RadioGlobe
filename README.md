@@ -48,3 +48,7 @@ Use ```raspi-config``` from an SSH session to configure WiFi once everything is 
    HINT: United Kingdom is GB!  Press Esc to return to the main menu then go to 'Network Options' > 'Wireless LAN' and
    enter your SSID (network name) and WiFi password.
 
+## Troubleshooting
+1. Check SPI and I2C are enabled in raspi-config - this can be changed by updates!
+2. SSH in and check radioglobe.service: ```systemctl status radioglobe.service```
+3. Turn it off and on again :) - use ```sudo poweroff```
