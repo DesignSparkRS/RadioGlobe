@@ -32,7 +32,7 @@ class Display (threading.Thread):
         self.buffer[3] = ""
         self.changed = True
 
-    def message(self, line_1="": str, line_2="": str, line_3="": str, line_4="": str):
+    def message(self, line_1="", line_2="", line_3="", line_4=""):
         self.buffer[0] = line_1.center(DISPLAY_COLUMNS)
         self.buffer[1] = line_2.center(DISPLAY_COLUMNS)
         self.buffer[2] = line_3.center(DISPLAY_COLUMNS)

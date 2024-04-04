@@ -7,7 +7,7 @@ ENCODER_RESOLUTION = 1024
 
 class Positional_Encoders (threading.Thread):
 
-    def __init__(self, threadID, name, latitude_offset=0: int, longitude_offset=0: int):
+    def __init__(self, threadID, name, latitude_offset=0, longitude_offset=0):
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.name = name

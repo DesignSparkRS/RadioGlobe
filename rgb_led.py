@@ -39,7 +39,7 @@ class RGB_LED (threading.Thread):
     # def __del__(self):
         # GPIO.cleanup()
 
-    def set_static(self, colour=None: str, timeout_sec=None: float, restore_previous_on_timeout=False: bool):
+    def set_static(self, colour=None, timeout_sec=None, restore_previous_on_timeout=False):
         if timeout_sec:
             if self.timer:
                 return
@@ -64,8 +64,8 @@ class RGB_LED (threading.Thread):
         if pins is not None:
             GPIO.output(pins, GPIO.HIGH)
 
-    def set_blink(self, colour_0=None: str, colour_1="OFF": str, timeout_sec=None: float,
-                  restore_previous_on_timeout=False: bool):
+    def set_blink(self, colour_0=None, colour_1="OFF", timeout_sec=None,
+                  restore_previous_on_timeout=False):
         if timeout_sec:
             if self.timer:
                 return

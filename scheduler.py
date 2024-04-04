@@ -15,7 +15,7 @@ class Scheduler (threading.Thread):
         self.time = 0
         self.timers = []
 
-    def attach_timer(self, callback: callable, initial_value_sec: int, one_shot=True: bool):
+    def attach_timer(self, callback: callable, initial_value_sec: int, one_shot=True):
         # Overwrite existing timer for the same callback
         for exist_timer in self.timers:
             if exist_timer[CALLBACK] == callback:
