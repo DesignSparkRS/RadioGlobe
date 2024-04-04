@@ -165,8 +165,8 @@ while True:
             display_thread.message(
                 line_1="Radio Globe",
                 line_2="Made for DesignSpark",
-                line_3="by Jude Pullen and",
-                line_4="Donald Robson, 2020")
+                line_3="Jude Pullen, Donald",
+                line_4="Robson, Pete Milne")
             scheduler.attach_timer(Back_To_Tuning, 3)
 
     elif state == "tuning":
