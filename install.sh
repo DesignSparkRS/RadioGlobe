@@ -2,7 +2,7 @@
 
 # Install all dependencies and setup radioglobe service to run under default user
 
-sudo apt install vlc
+sudo apt install vlc-bin vlc-plugin-base
 # sudo apt install vlc pulseaudio python3-pip python3-smbus python3-dev python3-rpi.gpio
 
 # Create python virtual environment
