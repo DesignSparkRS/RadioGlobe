@@ -1,5 +1,5 @@
 # Radioglobe
-First, install Raspberry Pi OS (Bullseye lite) onto a 16MB microSD card.
+First, install Raspberry Pi OS (Bookworm lite) onto a 16MB microSD card and make sure you have a working OS.
 
 If using Raspberry Pi Imager use the configure cog to set SSH ON and set your default user/password. 
 
@@ -52,3 +52,32 @@ Use ```raspi-config``` from an SSH session to configure WiFi once everything is 
 1. Check SPI and I2C are enabled in raspi-config - this can be changed by updates!
 2. SSH in and check radioglobe.service: ```systemctl status radioglobe.service```
 3. Turn it off and on again :) - use ```sudo poweroff```
+4. No audio output
+After experimenting with the Desktop OS version I found that setting the default target to multi-user.target would no longer output sound. This was fixed by creating a config file:
+```$ sudo vi /etc/asound.conf```
+with the following number according to the required sound card:
+```pete@radioglobe:~ $ cat /etc/asound.conf
+defaults.pcm.card 2
+defaults.pcm.device 2```
+
+The card settings can be found with:
+```$ aplay -l
+**** List of PLAYBACK Hardware Devices ****
+card 0: vc4hdmi0 [vc4-hdmi-0], device 0: MAI PCM i2s-hifi-0 [MAI PCM i2s-hifi-0]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 1: vc4hdmi1 [vc4-hdmi-1], device 0: MAI PCM i2s-hifi-0 [MAI PCM i2s-hifi-0]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 2: Headphones [bcm2835 Headphones], device 0: bcm2835 Headphones [bcm2835 Headphones]
+  Subdevices: 7/8
+  Subdevice #0: subdevice #0
+  Subdevice #1: subdevice #1
+  Subdevice #2: subdevice #2
+  Subdevice #3: subdevice #3
+  Subdevice #4: subdevice #4
+  Subdevice #5: subdevice #5
+  Subdevice #6: subdevice #6
+  Subdevice #7: subdevice #7```
+
+
