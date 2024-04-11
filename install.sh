@@ -19,6 +19,7 @@ pip install smbus
 # Bookworm compatibility with RPi.GPIO
 pip install lgpio
 pip install rpi-lgpio
+pip install python-vlc
 pip3 install https://github.com/pl31/python-liquidcrystal_i2c/archive/master.zip
 #pip3 install python-vlc
 

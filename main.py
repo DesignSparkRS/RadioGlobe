@@ -4,7 +4,8 @@ import threading
 import subprocess
 import logging
 
-from streaming import Streamer, set_volume
+# from python-vlc-streaming import Streamer, set_volume
+from python-vlc-streaming import Streamer
 import database
 from display import Display
 from positional_encoders import *
@@ -93,7 +94,7 @@ def Process_UI_Events():
         elif event[0] == "Volume":
             if event[1] == 1:
                 volume += VOLUME_INCREMENT
-                volume = set_volume(volume)
+                # volume = set_volume(volume)
                 volume_display = True
                 scheduler.attach_timer(Clear_Volume_Display, 3)
                 rgb_led.set_static("BLUE", timeout_sec=0.5, restore_previous_on_timeout=True)
@@ -103,7 +104,7 @@ def Process_UI_Events():
                     Back_To_Tuning()
                 else:
                     volume -= VOLUME_INCREMENT
-                    volume = set_volume(volume)
+                    # volume = set_volume(volume)
                     volume_display = True
                     scheduler.attach_timer(Clear_Volume_Display, 3)
                     rgb_led.set_static("BLUE", timeout_sec=0.5, restore_previous_on_timeout=True)
@@ -155,7 +156,7 @@ rgb_led.start()
 scheduler = Scheduler(50, "SCHEDULER")
 scheduler.start()
 
-set_volume(volume)
+# set_volume(volume)
 
 while True:
     if state == "start":
