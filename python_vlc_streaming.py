@@ -1,7 +1,6 @@
 # Thanks to Peter Milne!
 import time
 import logging
-import files
 import vlc
 
 
@@ -49,7 +48,7 @@ class Streamer ():
 if __name__ == "__main__":
     """python python-vlc-streaming.py ../stations.json"""
     import sys
-
+    import files
     format = "%(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
     # logging.getLogger().setLevel(logging.DEBUG)
