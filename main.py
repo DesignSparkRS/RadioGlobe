@@ -5,7 +5,7 @@ import subprocess
 import logging
 
 # from python-vlc-streaming import Streamer, set_volume
-from python_vlc_streaming import Streamer
+from streaming.python_vlc_streaming import Streamer
 import database
 from display import Display
 from positional_encoders import *
