@@ -26,6 +26,7 @@ state_entry = True
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 ui_manager = UI_Manager()
+streamer = Streamer(audio=AUDIO_SERVICE)
 
 
 # This is used to increase the size of the area searched around the coords
@@ -221,15 +222,13 @@ while True:
             jog = 0
             last_jog = 0
             rgb_led.set_static("RED", timeout_sec=3.0)
-            streamer = None
 
             # Get display coordinates - from file, so there's no jumping about
             latitude = database.stations_data[location]["coords"]["n"]
             longitude = database.stations_data[location]["coords"]["e"]
 
             # Play the top station
-            streamer = Streamer(AUDIO_SERVICE, url_list[jog])
-            streamer.play()
+            streamer.play(url_list[jog])
 
         # Exit back to tuning state if latch has 'come unstuck'
         elif not encoders_thread.is_latched():
@@ -243,9 +242,7 @@ while True:
             jog %= len(stations_list)
             last_jog = jog
 
-            streamer.stop()
-            streamer = Streamer(AUDIO_SERVICE, url_list[jog])
-            streamer.play()
+            streamer.play(url_list[jog])
 
         # Idle operation - just keep display updated
         else:
