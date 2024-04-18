@@ -13,15 +13,27 @@ source ./venv/bin/activate
 # Install python dependencies
 pip install spidev
 pip install smbus
-
-# Bullseye only
-#pip install RPi.GPIO
-# Bookworm compatibility with RPi.GPIO
-pip install lgpio
-pip install rpi-lgpio
 pip install python-vlc
-pip3 install https://github.com/pl31/python-liquidcrystal_i2c/archive/master.zip
-#pip3 install python-vlc
+pip install https://github.com/pl31/python-liquidcrystal_i2c/archive/master.zip
+
+# Install appropriate GPIO support
+source /etc/os-release
+echo "$VERSION_CODENAME"
+case $VERSION_CODENAME in
+    bullseye)
+    # Legacy support
+    pip install RPi.GPIO
+    ;;
+    bookworm)
+    # Bookworm compatibility with RPi.GPIO
+    pip install lgpio
+    pip install rpi-lgpio
+    ;;
+    *)
+    echo "Debian version unknown"
+    exit
+    ;;
+esac
 
 # Set paths according to username
 sed -i "s/USER/${USER}/g" services/*.service
