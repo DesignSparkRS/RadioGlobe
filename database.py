@@ -1,6 +1,7 @@
 import json
 import os
 import subprocess
+import logging
 from positional_encoders import ENCODER_RESOLUTION
 
 stations_data = {}
@@ -173,6 +174,10 @@ def Load_Calibration():
 
 
 if __name__ == "__main__":
+    format = "%(asctime)s: %(message)s"
+    logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
+    logging.getLogger().setLevel(logging.DEBUG)
+    
     Load_Map()
     Save_Map()
 
