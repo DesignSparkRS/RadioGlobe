@@ -143,7 +143,9 @@ def Process_UI_Events():
 
 
 # PROGRAM START
-database.Build_Map(database.STATIONS_JSON)
+# database.Build_Map(database.STATIONS_JSON)
+# database.Save_Map(database.STATIONS_JSON)
+database.Rebuild_Map()
 index_map = database.Load_Map(database.STATIONS_MAP)
 encoder_offsets = database.Load_Calibration()
 
