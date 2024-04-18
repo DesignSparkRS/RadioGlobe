@@ -30,6 +30,7 @@ streamer = Streamer(audio=AUDIO_SERVICE)
 
 stations_data = database.generate_stations_dict(database.STATIONS_JSON)
 
+
 # This is used to increase the size of the area searched around the coords
 # For example, fuzziness 2, latitude 50 and longitude 0 will result in a
 # search square 48,1022 to 52,2 (with encoder resolution 1024)
@@ -142,6 +143,7 @@ def Process_UI_Events():
 
 
 # PROGRAM START
+database.Build_Map(database.STATIONS_JSON)
 index_map = database.Load_Map(database.STATIONS_MAP)
 encoder_offsets = database.Load_Calibration()
 
@@ -192,7 +194,7 @@ while True:
             for ref in search_area:
                 # index = database.index_map[ref[0]][ref[1]]
                 index = index_map[ref[0]][ref[1]]
-                
+
                 if index != 0xFFFF:
                     encoders_thread.latch(coordinates[0], coordinates[1], stickiness=3)
                     state = "playing"
