@@ -142,10 +142,9 @@ def Load_Map():
     # Load the map data file
     try:
         logging.debug(f"Trying to loading map: {STATIONS_MAP}")
-        map_file = open(STATIONS_MAP, "rb")
-        index_bytes = map_file.read()
-        map_file.close()
-        logging.debug(f"{STATIONS_MAP} loaded...")
+        map_file = open(STATIONS_MAP, "rb") as map_file:
+            index_bytes = map_file.read()
+            logging.debug(f"{STATIONS_MAP} loaded...")
     except FileNotFoundError:
         logging.debug(f"{STATIONS_MAP} not found")
         Load_Map()
