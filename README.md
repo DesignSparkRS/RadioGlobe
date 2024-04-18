@@ -1,5 +1,5 @@
 # Radioglobe
-First, install Raspberry Pi OS (Bookworm lite) onto a 16MB microSD card and make sure you have a working OS.
+First, install Raspberry Pi OS Bookworm (recommended) or Bullseye (legacy) onto a 16MB microSD card and make sure you have a working OS.
 
 If using Raspberry Pi Imager use the configure cog to set SSH ON and set your default user/password. 
 
@@ -24,6 +24,8 @@ Now SSH in again.
 ## Installation
 For initial tests we recommend connecting to your network with an Ethernet cable. WiFi can be configured once everything is tested.
 
+The installer supports Bookworm and Bullseye OS versions.
+
 The install script no longer relies on username pi. It will install the Python scripts into your default users home directory and configure the systemd services according to your chosen username.
 
 From an SSH terminal:
@@ -35,6 +37,12 @@ From an SSH terminal:
 6. Change into the RadioGlobe dir ```cd RadioGlobe```
 7. Run the install script to install dependencies and setup the services ```./install.sh```
 At this point the RadioGlobe should start automatically.
+
+## Upgrading
+1. From users home directory copy the current installation so you can restore if necessary
+```cd ~```
+```cp RadioGlobe RadioGlobe.old```
+2. Follow installation instructions above. The installer supports Bookwork and Bullseye OS versions.
 
 ## Calibration
 1. When starting for the first time the RadioGlobe encoders need to be calibrated. Set the reticule cross-hairs to the intersection of the 0 latitude and 0 longitude lines then press and hold the middle button until the LED flashes Green and the display shows "Calibrated".
@@ -49,9 +57,10 @@ Use ```raspi-config``` from an SSH session to configure WiFi once everything is 
    enter your SSID (network name) and WiFi password.
 
 ## Troubleshooting
-1. Check SPI and I2C are enabled in raspi-config - this can be changed by updates!
-2. SSH in and check radioglobe.service: ```systemctl status radioglobe.service```
-3. Turn it off and on again :) - use ```sudo poweroff```
+1. Run installer with -x to see any installations issues.
+```bash -x install.sh```
+2. Check SPI and I2C are enabled in raspi-config - this can be changed by updates!
+3. SSH in and check radioglobe.service: ```systemctl status radioglobe.service```
 4. No audio output
 After experimenting with the Desktop OS version I found that setting the default target to multi-user.target would no longer output sound. This was fixed by creating a config file:
 ```$ sudo vi /etc/asound.conf```
@@ -79,5 +88,5 @@ card 2: Headphones [bcm2835 Headphones], device 0: bcm2835 Headphones [bcm2835 H
   Subdevice #5: subdevice #5
   Subdevice #6: subdevice #6
   Subdevice #7: subdevice #7```
-
+5. Turn it off and on again :) - use ```sudo poweroff```
 
