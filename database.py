@@ -4,6 +4,11 @@ import subprocess
 import logging
 from positional_encoders import ENCODER_RESOLUTION
 
+STATIONS_JSON = "stations.json"
+STATIONS_MAP = "data/map.dat"
+CHECKSUMS_JSON = "data/checksums.json"
+OFFSETS_JSON = "data/offsets.json"
+
 stations_data = {}
 
 # Make a map representing every possible coordinate, with a 2-byte address for looking up the city, which
@@ -19,11 +24,11 @@ def Get_Location_By_Index(index: int):
     if stations_data == {}:
         # Load stations database
         try:
-            stations_file = open("stations.json", "r")
+            stations_file = open(STATIONS_JSON, "r", encoding="utf8")
             stations_data = json.load(stations_file)
             stations_file.close()
         except FileNotFoundError:
-            print("./stations.json not found.  Terminating.")
+            print(f"{STATIONS_JSON} not found.  Terminating.")
             exit()
 
     i = 0
@@ -38,12 +43,13 @@ def Get_Location_By_Index(index: int):
 def Get_Checksums():
     # Produce md5s of the database, so changes can be detected, and the map so corruption can be detected
     checksums = {}
-    md5 = subprocess.run(["md5sum", "stations.json"], stdout=subprocess.PIPE)
+    md5 = subprocess.run(["md5sum", STATIONS_JSON], stdout=subprocess.PIPE)
     checksums["database"] = str(md5.stdout, encoding="utf8").strip()
 
-    md5 = None
-    md5 = subprocess.run(["md5sum", "data/map.dat"], stdout=subprocess.PIPE)
+    # md5 = None
+    md5 = subprocess.run(["md5sum", STATIONS_MAP], stdout=subprocess.PIPE)
     checksums["map"] = str(md5.stdout, encoding="utf8").strip()
+    logging.debug(f"Checksums: {checksums}")
 
     return checksums
 
@@ -52,11 +58,11 @@ def Build_Map():
     global index_map
     global stations_data
 
-    print("Rebuilding map")
+    logging.info("Rebuilding map...")
 
     # Load stations database
     try:
-        stations_file = open("stations.json", "r")
+        stations_file = open(STATIONS_JSON, "r")
         stations_data = json.load(stations_file)
         stations_file.close()
     except FileNotFoundError:
@@ -96,12 +102,12 @@ def Save_Map():
 
     # Save the locations to a file
     os.makedirs("data", exist_ok=True)
-    locations_file = open("data/map.dat", "wb")
+    locations_file = open(STATIONS_MAP, "wb")
     locations_file.write(index_bytes)
     locations_file.close()
 
     checksums = Get_Checksums()
-    checksum_file = open("data/checksums.json", "w")
+    checksum_file = open(CHECKSUMS_JSON, "w")
     checksum_file.write(json.dumps(checksums))
     checksum_file.close()
 
@@ -113,7 +119,7 @@ def Load_Map():
 
     try:
         checksums = Get_Checksums()
-        checksum_file = open("data/checksums.json", "r")
+        checksum_file = open(CHECKSUMS_JSON, "r")
         saved_checksums = json.load(checksum_file)
         checksum_file.close()
     except json.decoder.JSONDecodeError:
@@ -135,10 +141,13 @@ def Load_Map():
 
     # Load the map data file
     try:
-        map_file = open("data/map.dat", "rb")
+        logging.debug(f"Trying to loading map: {STATIONS_MAP}")
+        map_file = open(STATIONS_MAP, "rb")
         index_bytes = map_file.read()
         map_file.close()
+        logging.debug(f"{STATIONS_MAP} loaded...")
     except FileNotFoundError:
+        logging.debug(f"{STATIONS_MAP} not found")
         Load_Map()
         return
 
@@ -157,14 +166,14 @@ def Load_Map():
 
 def Save_Calibration(latitude: int, longitude: int):
     offsets = [latitude, longitude]
-    offsets_file = open("data/offsets.json", "w")
+    offsets_file = open(OFFSETS_JSON, "w")
     offsets_file.write(json.dumps(offsets))
     offsets_file.close()
 
 
 def Load_Calibration():
     try:
-        offsets_file = open("data/offsets.json", "r")
+        offsets_file = open(OFFSETS_JSON, "r")
         offsets = json.load(offsets_file)
         offsets_file.close()
     except Exception:
@@ -179,9 +188,9 @@ if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
     
     Load_Map()
-    Save_Map()
+    # Save_Map()
 
-    for lat in range(ENCODER_RESOLUTION):
-        for lon in range(ENCODER_RESOLUTION):
-            if index_map[lat][lon] != 0xFFFF:
-                print("OUT", lat, lon, index_map[lat][lon])
+    # for lat in range(ENCODER_RESOLUTION):
+        # for lon in range(ENCODER_RESOLUTION):
+            # if index_map[lat][lon] != 0xFFFF:
+                # print("OUT", lat, lon, index_map[lat][lon])
