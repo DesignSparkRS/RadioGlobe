@@ -1,7 +1,8 @@
 import json
-import os
+import os.path
 import subprocess
 import logging
+import hashlib
 from positional_encoders import ENCODER_RESOLUTION
 
 STATIONS_JSON = "stations.json"
@@ -18,40 +19,47 @@ stations_data = {}
 index_map = [[0xFFFF for longd in range(0, ENCODER_RESOLUTION)] for lat in range(0, ENCODER_RESOLUTION)]
 
 
-def Get_Location_By_Index(index: int):
-    global stations_data
-
-    if stations_data == {}:
-        # Load stations database
-        try:
-            stations_file = open(STATIONS_JSON, "r", encoding="utf8")
+def generate_stations_dict(filename: str) -> dict:
+    stations_dict = {}
+    # Load stations database
+    try:
+        with open(filename, "r", encoding="utf8") as stations_file:
             stations_data = json.load(stations_file)
-            stations_file.close()
-        except FileNotFoundError:
-            print(f"{STATIONS_JSON} not found.  Terminating.")
-            exit()
+        logging.info(f"Generating stations dictionary from {filename}")
+    except FileNotFoundError:
+        logging.info(f"{filename} not found")
+    return stations_dict
 
-    i = 0
-    for location in stations_data:
-        if i == index:
-            return location
-        i += 1
+# def Get_Location_By_Index(index: int):
+    # global stations_data
 
-    return "Unknown location"
+    # if stations_data == {}:
+        # # # Load stations database
+        # # try:
+            # # with open(STATIONS_JSON, "r", encoding="utf8") as stations_file:
+                # # stations_data = json.load(stations_file)
+        # # except FileNotFoundError:
+            # # print(f"{STATIONS_JSON} not found.  Terminating.")
+            # # exit()
+
+    # i = 0
+    # for location in stations_data:
+        # if i == index:
+            # return location
+        # i += 1
+
+    # return "Unknown location"
 
 
-def Get_Checksums():
-    # Produce md5s of the database, so changes can be detected, and the map so corruption can be detected
-    checksums = {}
-    md5 = subprocess.run(["md5sum", STATIONS_JSON], stdout=subprocess.PIPE)
-    checksums["database"] = str(md5.stdout, encoding="utf8").strip()
-
-    # md5 = None
-    md5 = subprocess.run(["md5sum", STATIONS_MAP], stdout=subprocess.PIPE)
-    checksums["map"] = str(md5.stdout, encoding="utf8").strip()
-    logging.debug(f"Checksums: {checksums}")
-
-    return checksums
+def get_checksum(filename: str) -> str:
+    """Return md5 checksum of file or empty string"""
+    checksum = ""
+    if os.path.exists(filename):
+        with open(filename, 'rb') as f:
+            data = f.read()    
+            checksum = hashlib.md5(data).hexdigest()
+    logging.debug(f"{filename} Checksum: {checksum}")
+    return checksum
 
 
 def Build_Map():
@@ -61,13 +69,13 @@ def Build_Map():
     logging.info("Rebuilding map...")
 
     # Load stations database
-    try:
-        stations_file = open(STATIONS_JSON, "r")
-        stations_data = json.load(stations_file)
-        stations_file.close()
-    except FileNotFoundError:
-        print("./stations.json not found.  Terminating.")
-        exit()
+    stations_data = load_stations_json(STATIONS_JSON)
+    # try:
+        # with open(STATIONS_JSON, "r", encoding="utf8") as stations_file:
+            # stations_data = json.load(stations_file)
+    # except FileNotFoundError:
+        # print(f"{STATIONS_JSON} not found.  Terminating.")
+        # exit()
 
     # Parse every location
     location_index = 0
@@ -86,8 +94,6 @@ def Build_Map():
 def Save_Map():
     global index_map
 
-    print("Saving map")
-
     # Save the location of each actual location - 2 bytes for latitude, 2 for longitude, 2 for the index
     index_bytes = bytes()
     for lat in range(0, ENCODER_RESOLUTION):
@@ -102,16 +108,14 @@ def Save_Map():
 
     # Save the locations to a file
     os.makedirs("data", exist_ok=True)
-    locations_file = open(STATIONS_MAP, "wb")
-    locations_file.write(index_bytes)
-    locations_file.close()
+    with open(STATIONS_MAP, "wb") as locations_file:
+        locations_file.write(index_bytes)
+        logging.info(f"Saving map {STATIONS_MAP}")
 
     checksums = Get_Checksums()
-    checksum_file = open(CHECKSUMS_JSON, "w")
-    checksum_file.write(json.dumps(checksums))
-    checksum_file.close()
-
-    print("Done")
+    with open(CHECKSUMS_JSON, "w") as checksum_file:
+        checksum_file.write(json.dumps(checksums))
+        logging.info(f"Saving checksums {CHECKSUMS_JSON}")
 
 
 def Load_Map():
@@ -119,9 +123,8 @@ def Load_Map():
 
     try:
         checksums = Get_Checksums()
-        checksum_file = open(CHECKSUMS_JSON, "r")
-        saved_checksums = json.load(checksum_file)
-        checksum_file.close()
+        with open(CHECKSUMS_JSON, "r") as checksum_file:
+            saved_checksums = json.load(checksum_file)
     except json.decoder.JSONDecodeError:
         Build_Map()
         return
@@ -141,8 +144,7 @@ def Load_Map():
 
     # Load the map data file
     try:
-        logging.debug(f"Trying to loading map: {STATIONS_MAP}")
-        map_file = open(STATIONS_MAP, "rb") as map_file:
+        with open(STATIONS_MAP, "rb") as map_file:
             index_bytes = map_file.read()
             logging.debug(f"{STATIONS_MAP} loaded...")
     except FileNotFoundError:
@@ -165,18 +167,19 @@ def Load_Map():
 
 def Save_Calibration(latitude: int, longitude: int):
     offsets = [latitude, longitude]
-    offsets_file = open(OFFSETS_JSON, "w")
-    offsets_file.write(json.dumps(offsets))
-    offsets_file.close()
+    with open(OFFSETS_JSON, "w") as offsets_file:
+        offsets_file.write(json.dumps(offsets))
+        logging.debug(f"{OFFSETS_JSON} saved...")
 
 
 def Load_Calibration():
     try:
-        offsets_file = open(OFFSETS_JSON, "r")
-        offsets = json.load(offsets_file)
-        offsets_file.close()
+        with open(OFFSETS_JSON, "r") as offsets_file:
+            offsets = json.load(offsets_file)
     except Exception:
         offsets = [0, 0]
+
+    logging.debug(f"Setting offsets to: {offsets}")
 
     return offsets
 
@@ -185,8 +188,10 @@ if __name__ == "__main__":
     format = "%(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
     logging.getLogger().setLevel(logging.DEBUG)
-    
-    Load_Map()
+
+    generate_stations_dict(STATIONS_JSON)
+    get_checksum(STATIONS_JSON)
+    #Load_Map()
     # Save_Map()
 
     # for lat in range(ENCODER_RESOLUTION):
