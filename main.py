@@ -28,6 +28,7 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 ui_manager = UI_Manager()
 streamer = Streamer(audio=AUDIO_SERVICE)
 
+stations_data = database.generate_stations_dict(database.STATIONS_JSON)
 
 # This is used to increase the size of the area searched around the coords
 # For example, fuzziness 2, latitude 50 and longitude 0 will result in a
@@ -141,7 +142,7 @@ def Process_UI_Events():
 
 
 # PROGRAM START
-database.Load_Map()
+index_map = database.Load_Map(database.STATIONS_MAP)
 encoder_offsets = database.Load_Calibration()
 
 # Positional encoders - used to select latitude and longitude
@@ -189,8 +190,9 @@ while True:
             # Check the search area.  Saving the first location name encountered
             # and all radio stations in the area, in order encountered
             for ref in search_area:
-                index = database.index_map[ref[0]][ref[1]]
-
+                # index = database.index_map[ref[0]][ref[1]]
+                index = index_map[ref[0]][ref[1]]
+                
                 if index != 0xFFFF:
                     encoders_thread.latch(coordinates[0], coordinates[1], stickiness=3)
                     state = "playing"
@@ -199,7 +201,8 @@ while True:
                     if location_name == "":
                         location_name = location
 
-                    for station in database.stations_data[location]["urls"]:
+                    # for station in database.stations_data[location]["urls"]:
+                    for station in stations_data[location]["urls"]:
                         stations_list.append(station["name"])
                         url_list.append(station["url"])
 
@@ -224,8 +227,10 @@ while True:
             rgb_led.set_static("RED", timeout_sec=3.0)
 
             # Get display coordinates - from file, so there's no jumping about
-            latitude = database.stations_data[location]["coords"]["n"]
-            longitude = database.stations_data[location]["coords"]["e"]
+            # latitude = database.stations_data[location]["coords"]["n"]
+            # longitude = database.stations_data[location]["coords"]["e"]
+            latitude = stations_data[location]["coords"]["n"]
+            longitude = stations_data[location]["coords"]["e"]
 
             # Play the top station
             streamer.play(url_list[jog])

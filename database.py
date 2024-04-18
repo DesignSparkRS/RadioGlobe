@@ -5,32 +5,36 @@ import logging
 import hashlib
 from positional_encoders import ENCODER_RESOLUTION
 
+# ENCODER_RESOLUTION = 100
+
 STATIONS_JSON = "stations.json"
+# STATIONS_JSON = "london-stations.json"
 STATIONS_MAP = "data/map.dat"
 CHECKSUMS_JSON = "data/checksums.json"
 OFFSETS_JSON = "data/offsets.json"
 
-stations_data = {}
+# stations_data = {}
 
 # Make a map representing every possible coordinate, with a 2-byte address for looking up the city, which
 # allows looking up the stations from the regular database.  This reduces the memory required to hold the map
 # to 2 MiB RAM and because the empty space is all 0xFF it can be compressed very easily if desired to just the
 # locations
-index_map = [[0xFFFF for longd in range(0, ENCODER_RESOLUTION)] for lat in range(0, ENCODER_RESOLUTION)]
+# index_map = [[0xFFFF for longd in range(0, ENCODER_RESOLUTION)] for lat in range(0, ENCODER_RESOLUTION)]
 
 
 def generate_stations_dict(filename: str) -> dict:
-    stations_dict = {}
+    # stations_dict = {}
     # Load stations database
     try:
         with open(filename, "r", encoding="utf8") as stations_file:
-            stations_data = json.load(stations_file)
+            stations_dict = json.load(stations_file)
         logging.info(f"Generating stations dictionary from {filename}")
     except FileNotFoundError:
         logging.info(f"{filename} not found")
+
     return stations_dict
 
-# def Get_Location_By_Index(index: int):
+def Get_Location_By_Index(index: int):
     # global stations_data
 
     # if stations_data == {}:
@@ -42,13 +46,14 @@ def generate_stations_dict(filename: str) -> dict:
             # # print(f"{STATIONS_JSON} not found.  Terminating.")
             # # exit()
 
-    # i = 0
-    # for location in stations_data:
-        # if i == index:
-            # return location
-        # i += 1
+    stations_data = generate_stations_dict(STATIONS_JSON)
+    i = 0
+    for location in stations_data:
+        if i == index:
+            return location
+        i += 1
 
-    # return "Unknown location"
+    return "Unknown location"
 
 
 def get_checksum(filename: str) -> str:
@@ -62,14 +67,21 @@ def get_checksum(filename: str) -> str:
     return checksum
 
 
-def Build_Map():
-    global index_map
-    global stations_data
+def Build_Map(filename: str) -> list:
+    # global index_map
+    # global stations_data
 
     logging.info("Rebuilding map...")
 
+    # Make a map representing every possible coordinate, with a 2-byte address for looking up the city, which
+    # allows looking up the stations from the regular database.  This reduces the memory required to hold the map
+    # to 2 MiB RAM and because the empty space is all 0xFF it can be compressed very easily if desired to just the
+    # locations
+    index_map = [[0xFFFF for longd in range(0, ENCODER_RESOLUTION)] for lat in range(0, ENCODER_RESOLUTION)]
+
     # Load stations database
-    stations_data = load_stations_json(STATIONS_JSON)
+    stations_data = generate_stations_dict(filename)
+    # print(stations_data)
     # try:
         # with open(STATIONS_JSON, "r", encoding="utf8") as stations_file:
             # stations_data = json.load(stations_file)
@@ -78,21 +90,26 @@ def Build_Map():
         # exit()
 
     # Parse every location
-    location_index = 0
-    for location in stations_data:
+    # location_index = 0
+    for idx, location in enumerate(stations_data):
         # Turn the coordinates into indexes for the map.  We need to shift all the numbers to make everything positive
         latitude = round((stations_data[location]["coords"]["n"] + 180) * ENCODER_RESOLUTION / 360)
         longitude = round((stations_data[location]["coords"]["e"] + 180) * ENCODER_RESOLUTION / 360)
-
+        # print(f"{idx}, {location}")
+        # print(f"{latitude}, {longitude}")
         # Record the index of the location in the map
-        index_map[latitude][longitude] = location_index
-        location_index += 1
+        # index_map[latitude][longitude] = location_index
+        index_map[latitude][longitude] = idx
+        # location_index += 1
 
-    Save_Map()
+    # logging.debug(f"{index_map}")
+    return index_map
+    # Save_Map()
 
 
 def Save_Map():
-    global index_map
+    # global index_map
+    index_map = Build_Map(STATIONS_JSON)
 
     # Save the location of each actual location - 2 bytes for latitude, 2 for longitude, 2 for the index
     index_bytes = bytes()
@@ -112,45 +129,45 @@ def Save_Map():
         locations_file.write(index_bytes)
         logging.info(f"Saving map {STATIONS_MAP}")
 
-    checksums = Get_Checksums()
-    with open(CHECKSUMS_JSON, "w") as checksum_file:
-        checksum_file.write(json.dumps(checksums))
-        logging.info(f"Saving checksums {CHECKSUMS_JSON}")
+    # checksums = Get_Checksums()
+    # with open(CHECKSUMS_JSON, "w") as checksum_file:
+        # checksum_file.write(json.dumps(checksums))
+        # logging.info(f"Saving checksums {CHECKSUMS_JSON}")
 
 
-def Load_Map():
-    global index_map
+def Load_Map(filename: str) -> list:
+    # global index_map
 
-    try:
-        checksums = Get_Checksums()
-        with open(CHECKSUMS_JSON, "r") as checksum_file:
-            saved_checksums = json.load(checksum_file)
-    except json.decoder.JSONDecodeError:
-        Build_Map()
-        return
-    except FileNotFoundError:
-        Build_Map()
-        return
+    # try:
+        # checksums = Get_Checksums()
+        # with open(CHECKSUMS_JSON, "r") as checksum_file:
+            # saved_checksums = json.load(checksum_file)
+    # except json.decoder.JSONDecodeError:
+        # Build_Map()
+        # return
+    # except FileNotFoundError:
+        # Build_Map()
+        # return
 
     # Check the md5 of the database, to see if the current map is still valid
-    if checksums["database"] != saved_checksums["database"]:
-        Build_Map()
-        return
+    # if checksums["database"] != saved_checksums["database"]:
+        # Build_Map()
+        # return
 
     # Check the md5 of the map, to see if it's valid
-    if checksums["map"] != saved_checksums["map"]:
-        Build_Map()
-        return
+    # if checksums["map"] != saved_checksums["map"]:
+        # Build_Map()
+        # return
 
     # Load the map data file
     try:
-        with open(STATIONS_MAP, "rb") as map_file:
+        with open(filename, "rb") as map_file:
             index_bytes = map_file.read()
-            logging.debug(f"{STATIONS_MAP} loaded...")
+            logging.debug(f"{filename} loaded...")
     except FileNotFoundError:
-        logging.debug(f"{STATIONS_MAP} not found")
-        Load_Map()
-        return
+        logging.debug(f"{filename} not found")
+        Save_Map()
+        # return
 
     # Ensure index_map is empty first
     index_map = [[0xFFFF for longd in range(0, ENCODER_RESOLUTION)] for lat in range(0, ENCODER_RESOLUTION)]
@@ -163,6 +180,7 @@ def Load_Map():
         value = (index_bytes[byte + 5] << 8) | index_bytes[byte + 4]
         byte += 6
         index_map[lat][lon] = value
+    return index_map
 
 
 def Save_Calibration(latitude: int, longitude: int):
@@ -191,6 +209,9 @@ if __name__ == "__main__":
 
     generate_stations_dict(STATIONS_JSON)
     get_checksum(STATIONS_JSON)
+    Build_Map(STATIONS_JSON)
+    Save_Map()
+    Load_Map(STATIONS_MAP)
     #Load_Map()
     # Save_Map()
 
