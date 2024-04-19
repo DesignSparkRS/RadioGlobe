@@ -79,55 +79,7 @@ def Build_Map(stations_json: str, stations_map: str):
         logging.info(f"Saving map {stations_map}")
 
 
-# def Rebuild_Map():
-    # logging.info("Rebuilding map...")
-    # index_map = Build_Map(radio_config.STATIONS_JSON)
-
-    # # Save the location of each actual location - 2 bytes for latitude, 2 for longitude, 2 for the index
-    # index_bytes = bytes()
-    # for lat in range(0, ENCODER_RESOLUTION):
-        # for lon in range(0, ENCODER_RESOLUTION):
-            # if index_map[lat][lon] != 0xFFFF:
-                # index_bytes += bytes([lat & 0xFF,
-                                      # (lat >> 8) & 0xFF,
-                                      # lon & 0xFF,
-                                      # (lon >> 8) & 0xFF,
-                                      # index_map[lat][lon] & 0xFF,
-                                      # (index_map[lat][lon] >> 8) & 0xFF])
-
-    # # Save the locations to a file
-    # with open(radio_config.STATIONS_MAP, "wb") as locations_file:
-        # locations_file.write(index_bytes)
-        # logging.info(f"Saving map {radio_config.STATIONS_MAP}")
-
-    # # checksums = Get_Checksums()
-    # # with open(radio_config.CHECKSUMS_JSON, "w") as checksum_file:
-        # # checksum_file.write(json.dumps(checksums))
-        # # logging.info(f"Saving checksums {radio_config.CHECKSUMS_JSON}")
-
-
 def Load_Map(filename: str) -> list:
-    # try:
-        # checksums = Get_Checksums()
-        # with open(radio_config.CHECKSUMS_JSON, "r") as checksum_file:
-            # saved_checksums = json.load(checksum_file)
-    # except json.decoder.JSONDecodeError:
-        # Build_Map()
-        # return
-    # except FileNotFoundError:
-        # Build_Map()
-        # return
-
-    # Check the md5 of the database, to see if the current map is still valid
-    # if checksums["database"] != saved_checksums["database"]:
-        # Build_Map()
-        # return
-
-    # Check the md5 of the map, to see if it's valid
-    # if checksums["map"] != saved_checksums["map"]:
-        # Build_Map()
-        # return
-
     # Load the map data file
     index_bytes = None
     try:
@@ -179,7 +131,6 @@ if __name__ == "__main__":
     Get_Location_By_Index(0)
     get_checksum(radio_config.STATIONS_JSON)
     Build_Map(radio_config.STATIONS_JSON, radio_config.STATIONS_MAP)
-    # Rebuild_Map()
     Load_Map(radio_config.STATIONS_MAP)
 
     # for lat in range(ENCODER_RESOLUTION):

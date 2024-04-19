@@ -145,9 +145,6 @@ def Process_UI_Events():
 
 
 # PROGRAM START
-# database.Build_Map(radio_config.STATIONS_JSON)
-# database.Save_Map(radio_config.STATIONS_JSON)
-# database.Rebuild_Map()
 database.Build_Map(radio_config.STATIONS_JSON, radio_config.STATIONS_MAP)
 index_map = database.Load_Map(radio_config.STATIONS_MAP)
 encoder_offsets = database.Load_Calibration()
@@ -197,7 +194,6 @@ while True:
             # Check the search area.  Saving the first location name encountered
             # and all radio stations in the area, in order encountered
             for ref in search_area:
-                # index = database.index_map[ref[0]][ref[1]]
                 index = index_map[ref[0]][ref[1]]
 
                 if index != 0xFFFF:
@@ -234,8 +230,6 @@ while True:
             rgb_led.set_static("RED", timeout_sec=3.0)
 
             # Get display coordinates - from file, so there's no jumping about
-            # latitude = database.stations_data[location]["coords"]["n"]
-            # longitude = database.stations_data[location]["coords"]["e"]
             latitude = stations_data[location]["coords"]["n"]
             longitude = stations_data[location]["coords"]["e"]
 
