@@ -10,20 +10,21 @@ from positional_encoders import ENCODER_RESOLUTION
 os.makedirs(radio_config.DATADIR, exist_ok=True)
 
 
-def generate_stations_dict(filename: str) -> dict:
-    # Load stations database
+def Load_Stations(stations_json: str) -> dict:
+    """Return dictionary of stations from stations file"""
+    stations_dict = {}
     try:
-        with open(filename, "r", encoding="utf8") as stations_file:
+        with open(stations_json, "r", encoding="utf8") as stations_file:
             stations_dict = json.load(stations_file)
-        logging.info(f"Generating stations dictionary from {filename}")
+        logging.info(f"Loaded stations from {stations_json}")
     except FileNotFoundError:
-        logging.info(f"{filename} not found")
+        logging.info(f"{stations_json} not found")
 
     return stations_dict
 
 
 def Get_Location_By_Index(index: int):
-    stations_data = generate_stations_dict(radio_config.STATIONS_JSON)
+    stations_data = Load_Stations(radio_config.STATIONS_JSON)
     for idx, location in enumerate(stations_data):
         if idx == index:
             logging.debug(f"{idx}, {location}")
@@ -51,7 +52,7 @@ def Build_Map(stations_json: str, stations_map: str):
     index_map = [[0xFFFF for longd in range(0, ENCODER_RESOLUTION)] for lat in range(0, ENCODER_RESOLUTION)]
 
     # Load stations database
-    stations_data = generate_stations_dict(stations_json)
+    stations_data = Load_Stations(stations_json)
 
     # Parse every location
     for idx, location in enumerate(stations_data):
@@ -174,7 +175,7 @@ if __name__ == "__main__":
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
     logging.getLogger().setLevel(logging.DEBUG)
 
-    generate_stations_dict(radio_config.STATIONS_JSON)
+    Load_Stations(radio_config.STATIONS_JSON)
     Get_Location_By_Index(0)
     get_checksum(radio_config.STATIONS_JSON)
     Build_Map(radio_config.STATIONS_JSON, radio_config.STATIONS_MAP)

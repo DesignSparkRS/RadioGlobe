@@ -30,7 +30,7 @@ state_entry = True
 ui_manager = UI_Manager()
 streamer = Streamer(audio=radio_config.AUDIO_SERVICE)
 
-stations_data = database.generate_stations_dict(radio_config.STATIONS_JSON)
+stations_data = database.Load_Stations(radio_config.STATIONS_JSON)
 
 
 # This is used to increase the size of the area searched around the coords
