@@ -1,3 +1,5 @@
+"""Global settings"""
+
 STATIONS_JSON = "stations.json"
 
 DATADIR = "data"
@@ -7,4 +9,5 @@ OFFSETS_JSON = "data/offsets.json"
 
 AUDIO_SERVICE = "alsa"
 
-FUZZINESS = 1
+# Affects sensitivity
+FUZZINESS = 2

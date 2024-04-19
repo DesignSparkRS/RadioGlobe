@@ -43,12 +43,12 @@ def get_checksum(filename: str) -> str:
     logging.debug(f"{filename} Checksum: {checksum}")
     return checksum
 
+
 def Build_Map(stations_data: dict, stations_map: str):
-# def Build_Map(stations_json: str, stations_map: str):
-    # Make a map representing every possible coordinate, with a 2-byte address for looking up the city, which
-    # allows looking up the stations from the regular database.  This reduces the memory required to hold the map
-    # to 2 MiB RAM and because the empty space is all 0xFF it can be compressed very easily if desired to just the
-    # locations
+    """Make a map representing every possible coordinate, with a 2-byte address for looking up the city, which
+    allows looking up the stations from the regular database.  This reduces the memory required to hold the map
+    to 2 MiB RAM and because the empty space is all 0xFF it can be compressed very easily if desired to just the
+    locations"""
     index_map = [[0xFFFF for longd in range(0, ENCODER_RESOLUTION)] for lat in range(0, ENCODER_RESOLUTION)]
 
     # Load stations database

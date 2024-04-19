@@ -33,12 +33,11 @@ streamer = Streamer(audio=radio_config.AUDIO_SERVICE)
 stations_data = database.Load_Stations(radio_config.STATIONS_JSON)
 
 
-# This is used to increase the size of the area searched around the coords
-# For example, fuzziness 2, latitude 50 and longitude 0 will result in a
-# search square 48,1022 to 52,2 (with encoder resolution 1024)
 def Look_Around(latitude: int, longitude: int, fuzziness: int):
-    # Offset fuzziness, so 0 means only the given coords
-    fuzziness += radio_config.FUZZINESS
+    """Used to increase the size of the area searched around the coords
+    For example, fuzziness 2, latitude 50 and longitude 0 will result in a
+    search square 48,1022 to 52,2 (with encoder resolution 1024)
+    Offset fuzziness, so 0 means only the given coords"""
 
     search_coords = []
 
@@ -166,6 +165,7 @@ scheduler.start()
 
 while True:
     if state == "start":
+        logging.debug(f"State, {state}")
         # Entry - setup state
         if state_entry:
             state_entry = False
@@ -177,6 +177,7 @@ while True:
             scheduler.attach_timer(Back_To_Tuning, 3)
 
     elif state == "tuning":
+        logging.debug(f"State, {state}")
         # Entry - setup state
         if state_entry:
             state_entry = False
@@ -186,7 +187,7 @@ while True:
         # Normal operation
         else:
             coordinates = encoders_thread.get_readings()
-            search_area = Look_Around(coordinates[0], coordinates[1], fuzziness=3)
+            search_area = Look_Around(coordinates[0], coordinates[1], fuzziness=radio_config.FUZZINESS)
             location_name = ""
             stations_list = []
             url_list = []
@@ -263,6 +264,7 @@ while True:
                 display_thread.update(latitude, longitude, location_name, volume_disp, stations_list[jog], False)
 
     elif state == "shutdown_confirm":
+        logging.debug(f"State, {state}")
         if state_entry:
             state_entry = False
             display_thread.clear()
@@ -277,6 +279,7 @@ while True:
             scheduler.attach_timer(Back_To_Tuning, 5)
 
     elif state == "shutdown":
+        logging.debug(f"State, {state}")
         if state_entry:
             state_entry = False
             display_thread.clear()
