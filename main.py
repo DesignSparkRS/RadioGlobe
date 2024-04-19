@@ -14,10 +14,6 @@ from ui_manager import UI_Manager
 from rgb_led import RGB_LED
 from scheduler import Scheduler
 
-format = "%(asctime)s: %(message)s"
-logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
-logging.getLogger().setLevel(logging.DEBUG)
-
 VOLUME_INCREMENT = 5
 
 state = "start"
