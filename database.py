@@ -9,6 +9,7 @@ from positional_encoders import ENCODER_RESOLUTION
 
 os.makedirs(radio_config.DATADIR, exist_ok=True)
 
+
 def generate_stations_dict(filename: str) -> dict:
     # Load stations database
     try:
@@ -42,7 +43,7 @@ def get_checksum(filename: str) -> str:
     return checksum
 
 
-def Build_Map(filename: str) -> list:
+def Build_Map(stations_json: str, stations_map: str):
     # Make a map representing every possible coordinate, with a 2-byte address for looking up the city, which
     # allows looking up the stations from the regular database.  This reduces the memory required to hold the map
     # to 2 MiB RAM and because the empty space is all 0xFF it can be compressed very easily if desired to just the
@@ -50,7 +51,7 @@ def Build_Map(filename: str) -> list:
     index_map = [[0xFFFF for longd in range(0, ENCODER_RESOLUTION)] for lat in range(0, ENCODER_RESOLUTION)]
 
     # Load stations database
-    stations_data = generate_stations_dict(filename)
+    stations_data = generate_stations_dict(stations_json)
 
     # Parse every location
     for idx, location in enumerate(stations_data):
@@ -58,13 +59,6 @@ def Build_Map(filename: str) -> list:
         latitude = round((stations_data[location]["coords"]["n"] + 180) * ENCODER_RESOLUTION / 360)
         longitude = round((stations_data[location]["coords"]["e"] + 180) * ENCODER_RESOLUTION / 360)
         index_map[latitude][longitude] = idx
-
-    return index_map
-
-
-def Rebuild_Map():
-    logging.info("Rebuilding map...")
-    index_map = Build_Map(radio_config.STATIONS_JSON)
 
     # Save the location of each actual location - 2 bytes for latitude, 2 for longitude, 2 for the index
     index_bytes = bytes()
@@ -79,14 +73,36 @@ def Rebuild_Map():
                                       (index_map[lat][lon] >> 8) & 0xFF])
 
     # Save the locations to a file
-    with open(radio_config.STATIONS_MAP, "wb") as locations_file:
+    with open(stations_map, "wb") as locations_file:
         locations_file.write(index_bytes)
-        logging.info(f"Saving map {radio_config.STATIONS_MAP}")
+        logging.info(f"Saving map {stations_map}")
 
-    # checksums = Get_Checksums()
-    # with open(radio_config.CHECKSUMS_JSON, "w") as checksum_file:
-        # checksum_file.write(json.dumps(checksums))
-        # logging.info(f"Saving checksums {radio_config.CHECKSUMS_JSON}")
+
+# def Rebuild_Map():
+    # logging.info("Rebuilding map...")
+    # index_map = Build_Map(radio_config.STATIONS_JSON)
+
+    # # Save the location of each actual location - 2 bytes for latitude, 2 for longitude, 2 for the index
+    # index_bytes = bytes()
+    # for lat in range(0, ENCODER_RESOLUTION):
+        # for lon in range(0, ENCODER_RESOLUTION):
+            # if index_map[lat][lon] != 0xFFFF:
+                # index_bytes += bytes([lat & 0xFF,
+                                      # (lat >> 8) & 0xFF,
+                                      # lon & 0xFF,
+                                      # (lon >> 8) & 0xFF,
+                                      # index_map[lat][lon] & 0xFF,
+                                      # (index_map[lat][lon] >> 8) & 0xFF])
+
+    # # Save the locations to a file
+    # with open(radio_config.STATIONS_MAP, "wb") as locations_file:
+        # locations_file.write(index_bytes)
+        # logging.info(f"Saving map {radio_config.STATIONS_MAP}")
+
+    # # checksums = Get_Checksums()
+    # # with open(radio_config.CHECKSUMS_JSON, "w") as checksum_file:
+        # # checksum_file.write(json.dumps(checksums))
+        # # logging.info(f"Saving checksums {radio_config.CHECKSUMS_JSON}")
 
 
 def Load_Map(filename: str) -> list:
@@ -161,8 +177,8 @@ if __name__ == "__main__":
     generate_stations_dict(radio_config.STATIONS_JSON)
     Get_Location_By_Index(0)
     get_checksum(radio_config.STATIONS_JSON)
-    Build_Map(radio_config.STATIONS_JSON)
-    Rebuild_Map()
+    Build_Map(radio_config.STATIONS_JSON, radio_config.STATIONS_MAP)
+    # Rebuild_Map()
     Load_Map(radio_config.STATIONS_MAP)
 
     # for lat in range(ENCODER_RESOLUTION):

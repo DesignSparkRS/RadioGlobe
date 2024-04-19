@@ -147,7 +147,8 @@ def Process_UI_Events():
 # PROGRAM START
 # database.Build_Map(radio_config.STATIONS_JSON)
 # database.Save_Map(radio_config.STATIONS_JSON)
-database.Rebuild_Map()
+# database.Rebuild_Map()
+database.Build_Map(radio_config.STATIONS_JSON, radio_config.STATIONS_MAP)
 index_map = database.Load_Map(radio_config.STATIONS_MAP)
 encoder_offsets = database.Load_Calibration()
 
