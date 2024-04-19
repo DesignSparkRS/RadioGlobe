@@ -7,13 +7,17 @@ import logging
 # from python-vlc-streaming import Streamer, set_volume
 from streaming.python_vlc_streaming import Streamer
 import database
+import radio_config
 from display import Display
 from positional_encoders import *
 from ui_manager import UI_Manager
 from rgb_led import RGB_LED
 from scheduler import Scheduler
 
-AUDIO_SERVICE = "pulse"
+format = "%(asctime)s: %(message)s"
+logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
+logging.getLogger().setLevel(logging.DEBUG)
+
 VOLUME_INCREMENT = 5
 
 state = "start"
@@ -23,12 +27,10 @@ jog = 0
 last_jog = 0
 state_entry = True
 
-logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
-
 ui_manager = UI_Manager()
-streamer = Streamer(audio=AUDIO_SERVICE)
+streamer = Streamer(audio=radio_config.AUDIO_SERVICE)
 
-stations_data = database.generate_stations_dict(database.STATIONS_JSON)
+stations_data = database.generate_stations_dict(radio_config.STATIONS_JSON)
 
 
 # This is used to increase the size of the area searched around the coords
@@ -36,7 +38,7 @@ stations_data = database.generate_stations_dict(database.STATIONS_JSON)
 # search square 48,1022 to 52,2 (with encoder resolution 1024)
 def Look_Around(latitude: int, longitude: int, fuzziness: int):
     # Offset fuzziness, so 0 means only the given coords
-    fuzziness += 1
+    fuzziness += radio_config.FUZZINESS
 
     search_coords = []
 
@@ -143,10 +145,10 @@ def Process_UI_Events():
 
 
 # PROGRAM START
-# database.Build_Map(database.STATIONS_JSON)
-# database.Save_Map(database.STATIONS_JSON)
+# database.Build_Map(radio_config.STATIONS_JSON)
+# database.Save_Map(radio_config.STATIONS_JSON)
 database.Rebuild_Map()
-index_map = database.Load_Map(database.STATIONS_MAP)
+index_map = database.Load_Map(radio_config.STATIONS_MAP)
 encoder_offsets = database.Load_Calibration()
 
 # Positional encoders - used to select latitude and longitude

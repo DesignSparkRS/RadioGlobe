@@ -3,12 +3,8 @@ import os.path
 import subprocess
 import logging
 import hashlib
+import radio_config
 from positional_encoders import ENCODER_RESOLUTION
-
-STATIONS_JSON = "stations.json"
-STATIONS_MAP = "data/map.dat"
-CHECKSUMS_JSON = "data/checksums.json"
-OFFSETS_JSON = "data/offsets.json"
 
 
 def generate_stations_dict(filename: str) -> dict:
@@ -24,7 +20,7 @@ def generate_stations_dict(filename: str) -> dict:
 
 
 def Get_Location_By_Index(index: int):
-    stations_data = generate_stations_dict(STATIONS_JSON)
+    stations_data = generate_stations_dict(radio_config.STATIONS_JSON)
     for idx, location in enumerate(stations_data):
         if idx == index:
             logging.debug(f"{idx}, {location}")
@@ -66,7 +62,7 @@ def Build_Map(filename: str) -> list:
 
 def Rebuild_Map():
     logging.info("Rebuilding map...")
-    index_map = Build_Map(STATIONS_JSON)
+    index_map = Build_Map(radio_config.STATIONS_JSON)
 
     # Save the location of each actual location - 2 bytes for latitude, 2 for longitude, 2 for the index
     index_bytes = bytes()
@@ -82,20 +78,20 @@ def Rebuild_Map():
 
     # Save the locations to a file
     os.makedirs("data", exist_ok=True)
-    with open(STATIONS_MAP, "wb") as locations_file:
+    with open(radio_config.STATIONS_MAP, "wb") as locations_file:
         locations_file.write(index_bytes)
-        logging.info(f"Saving map {STATIONS_MAP}")
+        logging.info(f"Saving map {radio_config.STATIONS_MAP}")
 
     # checksums = Get_Checksums()
-    # with open(CHECKSUMS_JSON, "w") as checksum_file:
+    # with open(radio_config.CHECKSUMS_JSON, "w") as checksum_file:
         # checksum_file.write(json.dumps(checksums))
-        # logging.info(f"Saving checksums {CHECKSUMS_JSON}")
+        # logging.info(f"Saving checksums {radio_config.CHECKSUMS_JSON}")
 
 
 def Load_Map(filename: str) -> list:
     # try:
         # checksums = Get_Checksums()
-        # with open(CHECKSUMS_JSON, "r") as checksum_file:
+        # with open(radio_config.CHECKSUMS_JSON, "r") as checksum_file:
             # saved_checksums = json.load(checksum_file)
     # except json.decoder.JSONDecodeError:
         # Build_Map()
@@ -139,14 +135,14 @@ def Load_Map(filename: str) -> list:
 
 def Save_Calibration(latitude: int, longitude: int):
     offsets = [latitude, longitude]
-    with open(OFFSETS_JSON, "w") as offsets_file:
+    with open(radio_config.OFFSETS_JSON, "w") as offsets_file:
         offsets_file.write(json.dumps(offsets))
-        logging.debug(f"{OFFSETS_JSON} saved...")
+        logging.debug(f"{radio_config.OFFSETS_JSON} saved...")
 
 
 def Load_Calibration():
     try:
-        with open(OFFSETS_JSON, "r") as offsets_file:
+        with open(radio_config.OFFSETS_JSON, "r") as offsets_file:
             offsets = json.load(offsets_file)
     except Exception:
         offsets = [0, 0]
@@ -161,12 +157,12 @@ if __name__ == "__main__":
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
     logging.getLogger().setLevel(logging.DEBUG)
 
-    generate_stations_dict(STATIONS_JSON)
+    generate_stations_dict(radio_config.STATIONS_JSON)
     Get_Location_By_Index(0)
-    get_checksum(STATIONS_JSON)
-    Build_Map(STATIONS_JSON)
+    get_checksum(radio_config.STATIONS_JSON)
+    Build_Map(radio_config.STATIONS_JSON)
     Rebuild_Map()
-    Load_Map(STATIONS_MAP)
+    Load_Map(radio_config.STATIONS_MAP)
 
     # for lat in range(ENCODER_RESOLUTION):
         # for lon in range(ENCODER_RESOLUTION):
