@@ -7,6 +7,8 @@ import radio_config
 from positional_encoders import ENCODER_RESOLUTION
 
 
+os.makedirs(radio_config.DATADIR, exist_ok=True)
+
 def generate_stations_dict(filename: str) -> dict:
     # Load stations database
     try:
@@ -77,7 +79,6 @@ def Rebuild_Map():
                                       (index_map[lat][lon] >> 8) & 0xFF])
 
     # Save the locations to a file
-    os.makedirs("data", exist_ok=True)
     with open(radio_config.STATIONS_MAP, "wb") as locations_file:
         locations_file.write(index_bytes)
         logging.info(f"Saving map {radio_config.STATIONS_MAP}")
