@@ -23,8 +23,8 @@ def Load_Stations(stations_json: str) -> dict:
     return stations_dict
 
 
-def Get_Location_By_Index(index: int):
-    stations_data = Load_Stations(radio_config.STATIONS_JSON)
+def Get_Location_By_Index(index: int, stations_data: dict):
+    # stations_data = Load_Stations(radio_config.STATIONS_JSON)
     for idx, location in enumerate(stations_data):
         if idx == index:
             logging.debug(f"{idx}, {location}")
@@ -43,8 +43,8 @@ def get_checksum(filename: str) -> str:
     logging.debug(f"{filename} Checksum: {checksum}")
     return checksum
 
-
-def Build_Map(stations_json: str, stations_map: str):
+def Build_Map(stations_data: dict, stations_map: str):
+# def Build_Map(stations_json: str, stations_map: str):
     # Make a map representing every possible coordinate, with a 2-byte address for looking up the city, which
     # allows looking up the stations from the regular database.  This reduces the memory required to hold the map
     # to 2 MiB RAM and because the empty space is all 0xFF it can be compressed very easily if desired to just the
@@ -52,7 +52,7 @@ def Build_Map(stations_json: str, stations_map: str):
     index_map = [[0xFFFF for longd in range(0, ENCODER_RESOLUTION)] for lat in range(0, ENCODER_RESOLUTION)]
 
     # Load stations database
-    stations_data = Load_Stations(stations_json)
+    # stations_data = Load_Stations(stations_json)
 
     # Parse every location
     for idx, location in enumerate(stations_data):
@@ -127,13 +127,14 @@ if __name__ == "__main__":
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
     logging.getLogger().setLevel(logging.DEBUG)
 
-    Load_Stations(radio_config.STATIONS_JSON)
+    stations_dict = Load_Stations(radio_config.STATIONS_JSON)
     Get_Location_By_Index(0)
     get_checksum(radio_config.STATIONS_JSON)
-    Build_Map(radio_config.STATIONS_JSON, radio_config.STATIONS_MAP)
-    Load_Map(radio_config.STATIONS_MAP)
+    # Build_Map(radio_config.STATIONS_JSON, radio_config.STATIONS_MAP)
+    Build_Map(stations_dict, radio_config.STATIONS_MAP)
+    index_map = Load_Map(radio_config.STATIONS_MAP)
 
-    # for lat in range(ENCODER_RESOLUTION):
-        # for lon in range(ENCODER_RESOLUTION):
-            # if index_map[lat][lon] != 0xFFFF:
-                # print("OUT", lat, lon, index_map[lat][lon])
+    for lat in range(ENCODER_RESOLUTION):
+        for lon in range(ENCODER_RESOLUTION):
+            if index_map[lat][lon] != 0xFFFF:
+                print("OUT", lat, lon, index_map[lat][lon])

@@ -145,7 +145,7 @@ def Process_UI_Events():
 
 
 # PROGRAM START
-database.Build_Map(radio_config.STATIONS_JSON, radio_config.STATIONS_MAP)
+database.Build_Map(stations_data, radio_config.STATIONS_MAP)
 index_map = database.Load_Map(radio_config.STATIONS_MAP)
 encoder_offsets = database.Load_Calibration()
 
@@ -200,11 +200,10 @@ while True:
                     encoders_thread.latch(coordinates[0], coordinates[1], stickiness=3)
                     state = "playing"
                     state_entry = True
-                    location = database.Get_Location_By_Index(index)
+                    location = database.Get_Location_By_Index(index, stations_data)
                     if location_name == "":
                         location_name = location
 
-                    # for station in database.stations_data[location]["urls"]:
                     for station in stations_data[location]["urls"]:
                         stations_list.append(station["name"])
                         url_list.append(station["url"])
