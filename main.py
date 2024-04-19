@@ -187,7 +187,9 @@ while True:
         # Normal operation
         else:
             coordinates = encoders_thread.get_readings()
+            logging.debug(f"Coordinates: {coordinates}")
             search_area = Look_Around(coordinates[0], coordinates[1], fuzziness=radio_config.FUZZINESS)
+            logging.debug(f"Search area: {search_area}")
             location_name = ""
             stations_list = []
             url_list = []
@@ -198,9 +200,10 @@ while True:
                 index = index_map[ref[0]][ref[1]]
 
                 if index != 0xFFFF:
-                    encoders_thread.latch(coordinates[0], coordinates[1], stickiness=3)
+                    encoders_thread.latch(coordinates[0], coordinates[1], stickiness=radio_config.STICKINESS)
                     state = "playing"
                     state_entry = True
+                    logging.debug("Latched...")
                     location = database.Get_Location_By_Index(index, stations_data)
                     if location_name == "":
                         location_name = location
@@ -238,6 +241,7 @@ while True:
 
         # Exit back to tuning state if latch has 'come unstuck'
         elif not encoders_thread.is_latched():
+            logging.debug("Unlatching...")
             streamer.stop()
             state = "tuning"
             state_entry = True
