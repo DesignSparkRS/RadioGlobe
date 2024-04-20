@@ -29,11 +29,13 @@ streamer = Streamer(audio=radio_config.AUDIO_SERVICE)
 stations_data = database.Load_Stations(radio_config.STATIONS_JSON)
 
 
-def Look_Around(latitude: int, longitude: int, fuzziness: int):
-    """Used to increase the size of the area searched around the coords
+def Look_Around(latitude: int, longitude: int, fuzziness: int) -> list:
+    """Return list of lat, long pairs for the current coords. Fuzziness
+    increases the size of the area searched around the coords.
+
     For example, fuzziness 2, latitude 50 and longitude 0 will result in a
     search square 48,1022 to 52,2 (with encoder resolution 1024)
-    Offset fuzziness, so 0 means only the given coords"""
+    Offset fuzziness. 0 means only the given coords"""
 
     search_coords = []
 
@@ -50,7 +52,41 @@ def Look_Around(latitude: int, longitude: int, fuzziness: int):
                 if [coord_x, coord_y] not in search_coords:
                     search_coords.append([coord_x, coord_y])
 
+    logging.debug(f"Search area: {search_coords}")
     return search_coords
+
+
+def Get_Found_Stations(search_area: list, index_map) -> str:
+    """Get station info found within search area
+    Can return more than one locations worth of urls depending on fuzziness"""
+    location = ""
+    location_name = ""
+    stations_list = []
+    url_list = []
+    # Check the search area.  Saving the first location name encountered
+    # and all radio stations in the area, in order encountered
+    for ref in search_area:
+        index = index_map[ref[0]][ref[1]]
+
+        if index != 0xFFFF:
+            logging.debug(f"Index: {index}")
+            encoders_thread.latch(ref[0], ref[1], stickiness=radio_config.STICKINESS)
+            logging.debug("Latched...")
+            location = database.Get_Location_By_Index(index, stations_data)
+            if location_name == "":
+                location_name = location
+
+            for station in stations_data[location]["urls"]:
+                stations_list.append(station["name"])
+                url_list.append(station["url"])
+
+    # Provide 'helper' coordinates
+    logging.debug(f"Coords: {coordinates[0]}, {coordinates[1]}")
+    latitude = round((360 * coordinates[0] / ENCODER_RESOLUTION - 180), 2)
+    longitude = round((360 * coordinates[1] / ENCODER_RESOLUTION - 180), 2)
+
+    logging.debug(f"Found stations: {location_name}, {latitude}, {longitude}, {stations_list}")
+    return location_name, latitude, longitude, stations_list, url_list
 
 
 def Back_To_Tuning():
@@ -161,10 +197,10 @@ scheduler.start()
 
 while True:
     if state == "start":
-        logging.debug(f"State, {state}")
         # Entry - setup state
         if state_entry:
             state_entry = False
+            logging.debug(f"State, {state}")
             display_thread.message(
                 line_1="Radio Globe",
                 line_2="Made for DesignSpark",
@@ -182,36 +218,15 @@ while True:
 
         # Normal operation
         else:
+            # Look arround and gather station info in the search area
             coordinates = encoders_thread.get_readings()
             logging.debug(f"Coordinates: {coordinates}")
             search_area = Look_Around(coordinates[0], coordinates[1], fuzziness=radio_config.FUZZINESS)
-            logging.debug(f"Search area: {search_area}")
-            location_name = ""
-            stations_list = []
-            url_list = []
-
-            # Check the search area.  Saving the first location name encountered
-            # and all radio stations in the area, in order encountered
-            for ref in search_area:
-                index = index_map[ref[0]][ref[1]]
-
-                if index != 0xFFFF:
-                    encoders_thread.latch(coordinates[0], coordinates[1], stickiness=radio_config.STICKINESS)
-                    state = "playing"
-                    state_entry = True
-                    logging.debug("Latched...")
-                    location = database.Get_Location_By_Index(index, stations_data)
-                    if location_name == "":
-                        location_name = location
-
-                    for station in stations_data[location]["urls"]:
-                        stations_list.append(station["name"])
-                        url_list.append(station["url"])
-
-            # Provide 'helper' coordinates
-            latitude = round((360 * coordinates[0] / ENCODER_RESOLUTION - 180), 2)
-            longitude = round((360 * coordinates[1] / ENCODER_RESOLUTION - 180), 2)
-
+            location_name, latitude, longitude, stations_list, url_list = Get_Found_Stations(search_area, index_map)
+            if location_name != "":
+                # Stations found so start playing them otherwise stay tuning
+                state = "playing"
+                state_entry = True
             if volume_display:
                 volume_disp = volume
             else:
@@ -229,15 +244,17 @@ while True:
             rgb_led.set_static("RED", timeout_sec=3.0)
 
             # Get display coordinates - from file, so there's no jumping about
-            latitude = stations_data[location]["coords"]["n"]
-            longitude = stations_data[location]["coords"]["e"]
+            latitude = stations_data[location_name]["coords"]["n"]
+            longitude = stations_data[location_name]["coords"]["e"]
 
             # Play the top station
-            streamer.play(url_list[jog])
+            if url_list:
+                streamer.play(url_list[jog])
 
         # Exit back to tuning state if latch has 'come unstuck'
         elif not encoders_thread.is_latched():
             logging.debug("Unlatching...")
+
             streamer.stop()
             state = "tuning"
             state_entry = True
