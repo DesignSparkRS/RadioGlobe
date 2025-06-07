@@ -1,0 +1,11 @@
+certifi==2025.4.26
+charset-normalizer==3.4.2
+idna==3.10
+lgpio==0.2.2.0
+liquidcrystal-i2c @ git+https://github.com/pl31/python-liquidcrystal_i2c.git@e26e4d22f039e9a2c04580dda072e8ca9693d1bb
+python-vlc==3.0.21203
+requests==2.32.3
+rpi-lgpio==0.6
+smbus==1.1.post2
+spidev==3.7
+urllib3==2.4.0

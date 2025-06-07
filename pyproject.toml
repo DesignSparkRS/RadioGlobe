@@ -4,4 +4,11 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "lgpio>=0.2.2.0",
+    "python-vlc>=3.0.21203",
+    "requests>=2.32.3",
+    "rpi-lgpio>=0.6",
+    "smbus>=1.1.post2",
+    "spidev>=3.7",
+]
