@@ -1,7 +1,4 @@
-#! /usr/bin/python3
-import re
 import time
-import threading
 import subprocess
 import logging
 
@@ -12,6 +9,7 @@ from positional_encoders import *
 from ui_manager import UI_Manager
 from rgb_led import RGB_LED
 from scheduler import Scheduler
+from urllib.parse import urlsplit, urlunsplit
 
 AUDIO_SERVICE = "pulse"
 VOLUME_INCREMENT = 5
@@ -22,9 +20,6 @@ volume = 95
 jog = 0
 last_jog = 0
 state_entry = True
-
-logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
-
 ui_manager = UI_Manager()
 
 
@@ -148,6 +143,10 @@ def Process_UI_Events():
 
 
 # PROGRAM START
+format = "%(asctime)s: %(message)s"
+logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
+logging.getLogger().setLevel(logging.DEBUG)
+
 database.Load_Map()
 encoder_offsets = database.Load_Calibration()
 
