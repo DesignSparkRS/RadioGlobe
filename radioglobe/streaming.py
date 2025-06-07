@@ -52,10 +52,10 @@ def check_url(url) -> str:
     return None
 
 
-def launch(audio, url) -> "pid":
+def launch(audio, url) -> int:
     """Play url returning the vlc pid"""
-    logging.info("Launching audio: %s, %s", audio, url)
-    radio = subprocess.Popen(["cvlc", "--aout", audio, url])
+    # Use dummy interface to avoid GUI popups
+    radio = subprocess.Popen(["cvlc", "--intf", "dummy", "--aout", audio, url])
     return radio.pid
 
 
@@ -94,7 +94,8 @@ class Streamer:
 
 if __name__ == "__main__":
     stations_file = "stations.json"
-    audio = "alsa"  # or pulse
+    # audio = "alsa"  # or pulse
+    audio = "pulse"  # Use PulseAudio instead of ALSA
     clip_duration = 10
 
     with Path(stations_file).open(mode="r") as f:
