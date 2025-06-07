@@ -11,6 +11,7 @@ from rgb_led import RGB_LED
 from scheduler import Scheduler
 from urllib.parse import urlsplit, urlunsplit
 
+RADIOGLOBE_VERSION = "1.0.0"
 AUDIO_SERVICE = "pulse"
 VOLUME_INCREMENT = 5
 
@@ -174,6 +175,8 @@ def Process_UI_Events():
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
 logging.getLogger().setLevel(logging.DEBUG)
+
+logging.info(f"Starting RadioGlobe v{RADIOGLOBE_VERSION}")
 
 database.Load_Map()
 encoder_offsets = database.Load_Calibration()
