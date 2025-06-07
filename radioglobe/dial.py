@@ -31,7 +31,11 @@ class Dial(threading.Thread):
             # work out which direction the dial was turned.
             # We cannot modify the global direction variable because
             # it is processed afterwards, so it would not be thread safe
-            GPIO.wait_for_edge(17, GPIO.FALLING)
+            try:
+                GPIO.wait_for_edge(17, GPIO.FALLING)
+            except Exception as e:
+                logging.error(f"Error waiting for edge: {e}")
+                continue
             new_direction = GPIO.input(18)
             if not new_direction:
                 new_direction = -1
