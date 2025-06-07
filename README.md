@@ -59,10 +59,9 @@ sudo raspi-config
 4. Reboot
 
 ### Step 5 - RadioGlobe download
-Install Git and download the RadioGlobe source from GitHub:
+Download and clone the RadioGlobe source from GitHub:
 ```
 cd ~
-sudo apt install git
 git clone https://github.com/DesignSparkRS/RadioGlobe
 ```
 Or the development system - for the more adventurous!:
@@ -76,9 +75,11 @@ The installation script `install.sh` will pull in all the software packages (qui
 The startup service unit `services/radioglobe.service` assumes RadioGlobe is installed in the `radioglobe` users home directory. If not you will need to edit the template accordingly.  
 
 You can run the installer multiple times if you have any issues.
+
+The first time this is run can take quite a while as there are a few additional packages to pull in.
 ```
 cd RadioGlobe
-bash -x install.sh
+./install.sh
 ```
 The system will reboot after completing and if all went well RadioGlobe will start with the welcome screen after about 30 seconds.
 
@@ -94,7 +95,7 @@ Once calibrated, move the reticule near to a large city, for example London GB (
 It is important to shut the Pi down correctly so that the SD card is not corrupted. Press and hold the `Jog` wheel until the shutdown message appears, then press the `middle` button to shut down. Wait more than 10 seconds before disconnecting the power.
 
 ### Stations
-There is a rather outdated stations.json file in the `stations` dir. `vfinel` maintains a much much larger and more up-to-date file at [stations.json](https://github.com/vfinel/RadioGlobe/blob/feature/update_stations/stations.json). It can be downloaded and copied to `/opt/radioglobe` then restart the service.
+There is a rather outdated `stations.json` file in the `stations` dir which contains all the station urls. `vfinel` maintains a much much larger and more up-to-date file at [stations.json](https://github.com/vfinel/RadioGlobe/blob/feature/update_stations/stations.json). It can be downloaded and copied to `/opt/radioglobe/` then restart the service.
 ```
 systemctl --user restart radioglobe.service
 ```
