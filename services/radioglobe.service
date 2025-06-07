@@ -1,22 +1,28 @@
 [Unit]
 Description=Radioglobe Radio Service
-#Note replace USER with username - the install script will do this for you
+# Note replace USER with username - the install script will do this for you
+# radioglobe.service should be located in /etc/systemd/user/
+# as it requires pulseaudio started as user, not root!
+# systemctl --user enable radioglobe.service
+# systemctl --user start radioglobe.service
 
-# Only start if system is configured
-ConditionPathExists=/home/USER/RadioGlobe/stations.json
+# Only start if system is configured - no longer required
+#ConditionPathExists=/home/USER/RadioGlobe/stations.json
 
-After=network.target
-Wants=network.target
+After=network.target bluetooth.target
+#Wants=network.target bluetooth.target
 
 [Service]
 Type=simple
 
-User=USER
-Group=USER
+#User=radioglobe
+#Group=radioglobe
 
-# Start python script in unbuffered mode ( output to logs )
-WorkingDirectory=/home/USER/RadioGlobe
-ExecStart=/usr/bin/python3 -u main.py
+#WorkingDirectory=/home/USER/RadioGlobe
+WorkingDirectory=/opt/radioglobe
+
+# Start python script in virtual environment
+ExecStart=/opt/radioglobe/venv/bin/python main.py
 
 # Can be enabled if app crashes
 #Restart=always
@@ -24,4 +30,4 @@ ExecStart=/usr/bin/python3 -u main.py
 
 [Install]
 # Start unit when the system is starting
-WantedBy=multi-user.target
+WantedBy=default.target
