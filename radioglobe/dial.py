@@ -2,6 +2,7 @@
 import time
 import threading
 import RPi.GPIO as GPIO
+import logging
 
 
 class Dial(threading.Thread):
