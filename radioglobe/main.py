@@ -52,6 +52,34 @@ def Look_Around(latitude: int, longitude: int, fuzziness: int):
     return search_coords
 
 
+def clean_url(url):
+    parts = urlsplit(url)
+    path = parts.path
+
+    # If path contains a dot, keep only up to the first extension (e.g. .mp3)
+    if '.' in path:
+        # Split path into segments (by /), process the last segment
+        segments = path.split('/')
+        last_segment = segments[-1]
+
+        # Keep only the part up to the first dot + extension
+        first_part = last_segment.split('.')
+        if len(first_part) > 1:
+            new_last_segment = first_part[0] + '.' + first_part[1]
+        else:
+            new_last_segment = last_segment  # fallback, no change
+
+        # Reassemble path
+        segments[-1] = new_last_segment
+        new_path = '/'.join(segments)
+    else:
+        new_path = path
+
+    # Reassemble full URL
+    new_url = urlunsplit((parts.scheme, parts.netloc, new_path, '', ''))
+    return new_url
+
+
 def Back_To_Tuning():
     global state
     global state_entry
@@ -210,7 +238,7 @@ while True:
 
                     for station in database.stations_data[location]["urls"]:
                         stations_list.append(station["name"])
-                        url_list.append(station["url"])
+                        url_list.append(clean_url(station["url"]))
 
             # Provide 'helper' coordinates
             latitude = round((360 * coordinates[0] / ENCODER_RESOLUTION - 180), 2)
@@ -239,7 +267,11 @@ while True:
             longitude = database.stations_data[location]["coords"]["e"]
 
             # Play the top station
-            streamer = Streamer(AUDIO_SERVICE, url_list[jog])
+            url = clean_url(url_list[jog])
+            if url_list[jog] != url:
+                logging.warning("URL cleaned: {}".format(url_list[jog]))
+            logging.info("Globe playing: {}".format(url))
+            streamer = Streamer(AUDIO_SERVICE, url)
             streamer.play()
 
         # Exit back to tuning state if latch has 'come unstuck'
@@ -254,8 +286,12 @@ while True:
             jog %= len(stations_list)
             last_jog = jog
 
+            url = clean_url(url_list[jog])
+            if url_list[jog] != url:
+                logging.warning("URL cleaned: {}".format(url_list[jog]))
+            logging.info("Jog playing: {}".format(url))
             streamer.stop()
-            streamer = Streamer(AUDIO_SERVICE, url_list[jog])
+            streamer = Streamer(AUDIO_SERVICE, url)
             streamer.play()
 
         # Idle operation - just keep display updated
