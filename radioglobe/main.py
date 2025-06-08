@@ -2,7 +2,7 @@ import time
 import subprocess
 import logging
 
-from streaming import Streamer, set_volume
+from streaming import Streamer
 import database
 from display import Display
 from positional_encoders import Positional_Encoders, ENCODER_RESOLUTION
@@ -170,7 +170,6 @@ def Process_UI_Events():
             elif event[0] == "Volume":
                 if event[1] == 1:
                     volume += VOLUME_INCREMENT
-                    volume = set_volume(volume)
                     volume_display = True
                     scheduler.attach_timer(Clear_Volume_Display, 3)
                     rgb_led.set_static("RED", timeout_sec=0.5)
@@ -180,7 +179,6 @@ def Process_UI_Events():
                         Back_To_Tuning()
                     else:
                         volume -= VOLUME_INCREMENT
-                        volume = set_volume(volume)
                         volume_display = True
                         scheduler.attach_timer(Clear_Volume_Display, 3)
                         rgb_led.set_static("RED", timeout_sec=0.5)
@@ -271,9 +269,6 @@ logging.info("Scheduler thread started")
 
 ui_manager = UI_Manager()
 logging.info("UI manager initialized")
-
-set_volume(volume)
-logging.info(f"Volume set to {volume}%")
 
 while True:
     try:
