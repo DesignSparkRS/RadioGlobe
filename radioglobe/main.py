@@ -156,7 +156,7 @@ def Process_UI_Events():
             rgb_led.set_static(
                 "GREEN", timeout_sec=0.5, restore_previous_on_timeout=True
             )
-            print("Calibrated")
+            logging.info("Calibrated".format())
             display_thread.message(
                 line_1="", line_2="Calibrated!", line_3="", line_4=""
             )

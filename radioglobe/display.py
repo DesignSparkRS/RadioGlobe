@@ -2,6 +2,7 @@
 import time
 import threading
 import liquidcrystal_i2c
+import logging
 
 DISPLAY_I2C_ADDRESS = 0x27
 DISPLAY_I2C_PORT = 1
@@ -17,23 +18,34 @@ class Display(threading.Thread):
         self.lcd = liquidcrystal_i2c.LiquidCrystal_I2C(
             DISPLAY_I2C_ADDRESS, DISPLAY_I2C_PORT, numlines=DISPLAY_ROWS
         )
-        self.buffer = ["" for row in range(0, DISPLAY_ROWS)]
+        self.buffer = [""] * DISPLAY_ROWS
         self.changed = False
+        self.running = True
+        self.station = ""  # Full station name
+        self.scroll_pos = 0  # Current scroll position
+        self.scroll_active = False  # Scrolling state
+        self.last_scroll_time = time.time()  # Track time for pauses
 
     def run(self):
-        while True:
+        while self.running:
+            current_time = time.time()
             if self.changed:
-                for line_num in range(0, DISPLAY_ROWS):
+                for line_num in range(DISPLAY_ROWS):
                     self.lcd.printline(line_num, self.buffer[line_num])
                 self.changed = False
-            time.sleep(0.1)
+                # logging.debug(f"Display updated: {self.buffer}")
+            if self.scroll_active and len(self.station) > DISPLAY_COLUMNS:
+                self._scroll_station(current_time)
+            time.sleep(0.05)  # 50ms for smooth updates
+
+    def stop(self):
+        self.running = False
 
     def clear(self):
-        self.buffer[0] = ""
-        self.buffer[1] = ""
-        self.buffer[2] = ""
-        self.buffer[3] = ""
+        self.buffer = [""] * DISPLAY_ROWS
         self.changed = True
+        self.scroll_active = False
+        logging.debug("Display cleared")
 
     def message(
         self, line_1: str = "", line_2: str = "", line_3: str = "", line_4: str = ""
@@ -43,6 +55,8 @@ class Display(threading.Thread):
         self.buffer[2] = line_3.center(DISPLAY_COLUMNS)
         self.buffer[3] = line_4.center(DISPLAY_COLUMNS)
         self.changed = True
+        self.scroll_active = False
+        logging.debug(f"Message set: {self.buffer}")
 
     def update(
         self,
@@ -53,57 +67,101 @@ class Display(threading.Thread):
         station: str,
         arrows: bool,
     ):
+        # Coordinates
         if north >= 0:
-            self.buffer[0] = ("{:5.2f}N, ").format(north)
+            self.buffer[0] = f"{north:5.2f}N, "
         else:
-            self.buffer[0] = ("{:5.2f}S, ").format(abs(north))
-
+            self.buffer[0] = f"{abs(north):5.2f}S, "
         if east >= 0:
-            self.buffer[0] += ("{:6.2f}E").format(east)
+            self.buffer[0] += f"{east:6.2f}E"
         else:
-            self.buffer[0] += ("{:6.2f}W").format(abs(east))
-
+            self.buffer[0] += f"{abs(east):6.2f}W"
         self.buffer[0] = self.buffer[0].center(DISPLAY_COLUMNS)
+
+        # Location
         self.buffer[1] = location.center(DISPLAY_COLUMNS)
 
-        # Volume display
-        self.buffer[2] = ""
-        bar_length = (volume * DISPLAY_COLUMNS) // 100
-        for i in range(bar_length):
-            self.buffer[2] += "-"
-        for i in range(bar_length, DISPLAY_COLUMNS):
-            self.buffer[2] += " "
+        # Volume bar
+        bar_length = (volume * DISPLAY_COLUMNS) // 100 if volume > 0 else 0
+        self.buffer[2] = "-" * bar_length + " " * (DISPLAY_COLUMNS - bar_length)
 
-        if arrows:
-            # Trim/pad the station name to fit arrows at each side of the display
-            station = station[: (DISPLAY_COLUMNS - 4)]
-            padding = DISPLAY_COLUMNS - 4 - len(station)
-            start_padding = padding // 2
-            end_padding = padding - start_padding
-            while start_padding:
-                station = " " + station
-                start_padding -= 1
-            while end_padding:
-                station += " "
-                end_padding -= 1
+        # Station Name Handling
+        if station != self.station:  # Only reset if station changes
+            self.station = station
+            self.scroll_pos = 0
+            self.last_scroll_time = time.time()
+            logging.debug(f"Station set to: {station}")
+        if len(station) <= DISPLAY_COLUMNS:
+            self.buffer[3] = station.center(DISPLAY_COLUMNS)
+            self.scroll_active = False
+        else:
+            self.scroll_active = True
+        self.changed = True
 
-            station = "< " + station + " >"
-        self.buffer[3] = station.center(DISPLAY_COLUMNS)
+    def _scroll_station(self, current_time):
+        if not self.scroll_active:
+            return
+
+        scroll_speed = 0.2  # 200ms per character shift
+        pause_duration = 2  # 2s pause at start only
+        separator = " - "
+        padded_station = self.station + separator
+        display_text = padded_station + padded_station  # Duplicate for looping
+        max_pos = len(padded_station)
+
+        elapsed = current_time - self.last_scroll_time
+
+        if self.scroll_pos == 0 and elapsed < pause_duration:
+            self.buffer[3] = self.station[:DISPLAY_COLUMNS]
+        elif self.scroll_pos == 0 and elapsed >= pause_duration:
+            self.scroll_pos += 1
+            self.last_scroll_time = current_time
+            self.buffer[3] = display_text[
+                self.scroll_pos : self.scroll_pos + DISPLAY_COLUMNS
+            ]
+            logging.debug(
+                f"Scrolling started: pos={self.scroll_pos}, text='{self.buffer[3]}'"
+            )
+        else:  # Continuous scrolling, no end pause
+            if elapsed >= scroll_speed:
+                self.scroll_pos = (self.scroll_pos + 1) % max_pos  # Loop back to start
+                self.buffer[3] = display_text[
+                    self.scroll_pos : self.scroll_pos + DISPLAY_COLUMNS
+                ]
+                self.last_scroll_time = current_time
+                logging.debug(
+                    f"Scrolling: pos={self.scroll_pos}, text='{self.buffer[3]}'"
+                )
 
         self.changed = True
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
+    )
     try:
         display_thread = Display(1, "Display")
         display_thread.start()
+
+        # Test short name
         display_thread.update(
-            51.45, -2.59, "Bristol, United Kingdom", 45, "BBC Radio Bristol", True
+            51.45, -2.59, "Bristol, UK", 45, "BBC Radio Bristol", False
         )
         time.sleep(5)
+
+        # Test long name
+        display_thread.update(
+            51.45, -2.59, "Bristol, UK", 45, "BBC Radio Bristol Extra Long Name", False
+        )
+        time.sleep(20)  # Watch it scroll
+
         display_thread.update(0, 0, "Clearing in 2s...", 0, "", False)
         time.sleep(2)
         display_thread.clear()
+        display_thread.stop()
+        display_thread.join()
 
-    except:
-        exit()
+    except KeyboardInterrupt:
+        display_thread.stop()
+        display_thread.join()
