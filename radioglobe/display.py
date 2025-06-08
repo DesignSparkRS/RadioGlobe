@@ -129,9 +129,9 @@ class Display(threading.Thread):
                     self.scroll_pos : self.scroll_pos + DISPLAY_COLUMNS
                 ]
                 self.last_scroll_time = current_time
-                logging.debug(
-                    f"Scrolling: pos={self.scroll_pos}, text='{self.buffer[3]}'"
-                )
+                # logging.debug(
+                #     f"Scrolling: pos={self.scroll_pos}, text='{self.buffer[3]}'"
+                # )
 
         self.changed = True
 
