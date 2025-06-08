@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.1.0
+
+### Highlights
+
+<!-- Include any especially major or disruptive changes here -->
+
+- Several improvements originally contributed by `johnmduff76` in [issue #11](https://github.com/DesignSparkRS/RadioGlobe/issues/11)
+    - New city selection function by short pressing the job button, then scrolling through the returned list of cities close by.
+    - Scrolling of long station names on the display.
+    - Improved volume control when pressing top and bottom buttons to change volume settings.
+
 ## 1.0.0
 
 ### Highlights

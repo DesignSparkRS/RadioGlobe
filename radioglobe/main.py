@@ -12,7 +12,7 @@ from scheduler import Scheduler
 from urllib.parse import urlsplit, urlunsplit
 from dial import MODE_STATION, MODE_CITY
 
-RADIOGLOBE_VERSION = "1.0.0"
+RADIOGLOBE_VERSION = "1.1.0"
 AUDIO_SERVICE = "pulse"
 VOLUME_INCREMENT = 5
 
