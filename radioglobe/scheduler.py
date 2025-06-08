@@ -24,7 +24,7 @@ class Scheduler(threading.Thread):
             if exist_timer[CALLBACK] == callback:
                 exist_timer[EXPIRY] = self.time + initial_value_sec
                 if not one_shot:
-                    new_timer[RELOAD] = initial_value_sec
+                    exist_timer[RELOAD] = initial_value_sec
                 return
 
         # Else make a new timer
