@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.2.0
+
+### Highlights
+
+<!-- Include any especially major or disruptive changes here -->
+
+- An improved streamer that no longer crashes when the player errors out
+
 ## 1.1.0
 
 ### Highlights
