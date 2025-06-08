@@ -119,9 +119,9 @@ class Display(threading.Thread):
             self.buffer[3] = display_text[
                 self.scroll_pos : self.scroll_pos + DISPLAY_COLUMNS
             ]
-            logging.debug(
-                f"Scrolling started: pos={self.scroll_pos}, text='{self.buffer[3]}'"
-            )
+            # logging.debug(
+            #     f"Scrolling started: pos={self.scroll_pos}, text='{self.buffer[3]}'"
+            # )
         else:  # Continuous scrolling, no end pause
             if elapsed >= scroll_speed:
                 self.scroll_pos = (self.scroll_pos + 1) % max_pos  # Loop back to start
