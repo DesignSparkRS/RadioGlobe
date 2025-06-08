@@ -69,7 +69,7 @@ class RGB_LED(threading.Thread):
         GPIO.output([RED_PIN, GREEN_PIN, BLUE_PIN], GPIO.LOW)
 
         # Write required pins high
-        if pins != None:
+        if pins is not None:
             GPIO.output(pins, GPIO.HIGH)
 
     def set_blink(
@@ -107,7 +107,7 @@ class RGB_LED(threading.Thread):
             GPIO.output([RED_PIN, GREEN_PIN, BLUE_PIN], GPIO.LOW)
 
             # Write required pins high
-            if pins != None:
+            if pins is not None:
                 GPIO.output(pins, GPIO.HIGH)
 
             # Flash/wait period
@@ -145,6 +145,6 @@ if __name__ == "__main__":
                 led.set_static(colour)
                 time.sleep(0.5)
 
-    except:
+    except Exception:
         GPIO.cleanup()
         exit()

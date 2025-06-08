@@ -1,4 +1,3 @@
-#! /usr/bin/python3
 import time
 import threading
 import RPi.GPIO as GPIO
@@ -91,7 +90,6 @@ if __name__ == "__main__":
             ("Top", 5),  # Could be volume up
             ("Mid", 6),  # Could be volume down
             ("Low", 12),
-            ("Shutdown", 26),
         ]
     )
     button_events = []

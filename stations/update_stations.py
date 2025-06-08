@@ -24,7 +24,6 @@ import json
 
 
 def run(stations_json, new_stations_json):
-
     # Get stations dict
     with open(stations_json, "r") as read_file:
         stations_dict = json.load(read_file)
@@ -42,7 +41,9 @@ def run(stations_json, new_stations_json):
         else:
             print("Updating stations...")
             for station in data["urls"]:
-                names_list = [station["name"] for station in stations_dict[city]["urls"]]
+                names_list = [
+                    station["name"] for station in stations_dict[city]["urls"]
+                ]
                 print(names_list)
                 print("Checking station name: ", station["name"])
                 # Add new stations to city
@@ -56,11 +57,11 @@ def run(stations_json, new_stations_json):
                             print("Updating station URL: ", s["name"], s["url"])
                             s["url"] = station["url"]
 
-    with open(stations_json, 'w', encoding='utf8') as f:
+    with open(stations_json, "w", encoding="utf8") as f:
         json.dump(stations_dict, f, indent=2, ensure_ascii=False)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
     stations_file = sys.argv[1]
