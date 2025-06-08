@@ -46,7 +46,7 @@ class Positional_Encoders(threading.Thread):
         self.longitude = (longitude - self.longitude_offset) % ENCODER_RESOLUTION
 
     def is_latched(self):
-        if self.latch_stickiness != None:
+        if self.latch_stickiness is not None:
             return True
         return False
 
@@ -97,7 +97,7 @@ class Positional_Encoders(threading.Thread):
                 # Invert the latitude reading
                 readings[0] = ENCODER_RESOLUTION - readings[0]
 
-                if self.latch_stickiness == None:
+                if self.latch_stickiness is None:
                     # Not 'stuck', so just update the coords
                     self.latitude = readings[0]
                     self.longitude = readings[1]
