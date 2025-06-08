@@ -33,6 +33,7 @@ class Display(threading.Thread):
                 for line_num in range(DISPLAY_ROWS):
                     self.lcd.printline(line_num, self.buffer[line_num])
                 self.changed = False
+                time.sleep(1)  # Hold display for a bit
                 # logging.debug(f"Display updated: {self.buffer}")
             if self.scroll_active and len(self.station) > DISPLAY_COLUMNS:
                 self._scroll_station(current_time)
